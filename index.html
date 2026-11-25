@@ -1,0 +1,1477 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light dark" />
+<link rel="icon" href="data:," />
+<title>PM Suite — Roadmap Deck & Gantt Chart Builder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
+<style>
+:root{
+  --bg:#f4f5f3; --panel:#ffffff; --panel-2:#eef1ee; --ink:#14201c; --muted:#5c6b64; --line:#d9ded9;
+  --primary:#0f3b4d; --primary-ink:#ffffff; --accent:#e9a23b; --accent-ink:#1a1405;
+  --teal:#147a6e; --red:#b42318; --red-bg:#fef3f2; --amber-bg:#fffaeb; --green:#067647; --green-bg:#ecfdf3;
+  --radius:14px; --shadow:0 10px 30px rgba(16,35,30,.08);
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#0e1513; --panel:#16211d; --panel-2:#1c2a25; --ink:#eef4f1; --muted:#9db0a6; --line:#2a3a34; --shadow:0 10px 30px rgba(0,0,0,.35); --red-bg:#2b1715; --amber-bg:#2b2110; --green-bg:#12291e; }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Archivo",system-ui,-apple-system,Segoe UI,sans-serif;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit}
+button,[role="button"],select,input:not([type="checkbox"]){min-height:38px}
+a{color:var(--primary)}
+@media (prefers-color-scheme: dark){ a{color:#7dd3c8} }
+
+.topbar{position:sticky;top:0;z-index:20;background:color-mix(in srgb, var(--bg) 88%, transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.topbar-inner{max-width:1440px;margin:0 auto;padding:10px 16px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.topbar .hint{font-size:13px;color:var(--muted);font-weight:600;margin-right:auto;line-height:1.35}
+.btn{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:999px;padding:8px 14px;font-weight:700;font-size:14px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;justify-content:center;min-height:40px}
+.btn:hover{border-color:var(--muted)}
+.btn.primary{background:var(--primary);color:#fff;border-color:var(--primary)}
+.btn.accent{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.small{min-height:36px;padding:6px 11px;font-size:13px}
+.btn.danger{color:var(--red)}
+.btn:disabled{opacity:.55;cursor:not-allowed}
+.seg{display:inline-flex;background:var(--panel-2);border:1px solid var(--line);border-radius:999px;padding:3px;gap:2px;flex-wrap:wrap}
+.seg button{border:0;background:transparent;border-radius:999px;padding:7px 12px;font-weight:700;font-size:13px;cursor:pointer;color:var(--muted);min-height:36px}
+.seg button[aria-pressed="true"]{background:var(--panel);color:var(--ink);box-shadow:0 1px 6px rgba(0,0,0,.12)}
+
+.layout{display:grid;grid-template-columns:440px minmax(0,1fr);gap:20px;align-items:start}
+@media (max-width:980px){ .layout{grid-template-columns:1fr} }
+
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+.card + .card{margin-top:16px}
+.card-head{padding:16px 18px 0;display:flex;gap:10px;align-items:flex-start}
+.step-num{font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;background:var(--primary);color:#fff;border-radius:6px;padding:4px 7px;letter-spacing:.06em;flex:none;margin-top:2px}
+.card-head h2{font-size:17px;margin:0;line-height:1.25;letter-spacing:-.01em}
+.card-head p{margin:4px 0 0;font-size:13px;color:var(--muted);line-height:1.45}
+.card-body{padding:14px 18px 18px}
+.field{margin-bottom:12px}
+.field label{display:block;font-size:12px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.field input[type="text"],.field input[type="password"],.field input[type="number"],.field input[type="date"],.field select,.field textarea{width:100%;border:1px solid var(--line);border-radius:10px;background:var(--panel);color:var(--ink);padding:9px 11px;font-size:15px;min-height:42px}
+.field textarea{min-height:74px;resize:vertical;line-height:1.45}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+@media (max-width:520px){ .grid2,.grid3{grid-template-columns:1fr} }
+.color-row{display:flex;gap:10px;align-items:center}
+.color-row input[type="color"]{width:52px;height:42px;border:1px solid var(--line);border-radius:10px;background:var(--panel);padding:4px;cursor:pointer}
+.color-row code{font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--muted)}
+.logo-preview{display:flex;gap:12px;align-items:center;border:1px dashed var(--line);border-radius:10px;padding:10px;background:var(--panel-2)}
+.logo-preview img{max-width:110px;max-height:44px;object-fit:contain;background:#fff;border-radius:6px;padding:4px}
+.logo-preview span{font-size:13px;color:var(--muted);line-height:1.4}
+input[type="file"]{width:100%;font-size:14px;color:var(--muted)}
+
+/* Epics */
+.epic{border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:12px;background:var(--panel)}
+.epic-top{display:flex;gap:8px;align-items:center;margin-bottom:10px}
+.epic-dot{width:14px;height:14px;border-radius:4px;flex:none}
+.epic-top strong{font-size:14px;margin-right:auto;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.icon-btn{border:1px solid var(--line);background:var(--panel);border-radius:8px;width:38px;height:38px;cursor:pointer;font-size:15px;line-height:1;flex:none}
+.features{border-top:1px dashed var(--line);margin-top:10px;padding-top:10px}
+.features h4{margin:0 0 8px;font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.feat-row{display:grid;grid-template-columns:minmax(0,1fr) 150px 108px 38px;gap:6px;margin-bottom:6px}
+.feat-row input,.feat-row select{border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--ink);padding:7px 8px;font-size:14px;min-height:38px;width:100%}
+@media (max-width:520px){ .feat-row{grid-template-columns:minmax(0,1fr) 138px 38px} .feat-row select{grid-column:1 / -2} }
+
+/* Checks */
+.check{border-radius:10px;padding:10px 12px;font-size:14px;line-height:1.45;margin-bottom:8px;display:flex;gap:8px}
+.check.warn{background:var(--amber-bg);border:1px solid #f5d48a}
+.check.bad{background:var(--red-bg);border:1px solid #f0a49d}
+.check.ok{background:var(--green-bg);border:1px solid #8fd0ab}
+.check span{flex:none}
+
+/* Preview */
+.preview-col{position:sticky;top:76px}
+@media (max-width:980px){ .preview-col{position:static} }
+.preview-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.preview-head h2{font-size:15px;margin:0;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.preview-head .spacer{flex:1}
+.slide-label{font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:18px 0 8px}
+.slide-label:first-of-type{margin-top:0}
+.slide{aspect-ratio:16/9;width:100%;border-radius:10px;overflow:hidden;position:relative;box-shadow:0 18px 44px rgba(10,25,22,.22);background:#fff;color:#14201c;font-size:clamp(10px,1.35vw,15px)}
+.slide-inner{position:absolute;inset:0;padding:5.5% 6%;display:flex;flex-direction:column}
+/* Cover */
+.cover{background:var(--slide-primary,#0f3b4d);color:#fff}
+.cover .kicker{font-family:"IBM Plex Mono",monospace;font-size:.78em;letter-spacing:.18em;text-transform:uppercase;opacity:.75;font-weight:600}
+.cover h3{font-size:2.9em;line-height:1.04;margin:.35em 0 .3em;letter-spacing:-.02em;font-weight:900;max-width:12em}
+.cover .tagline{font-size:1.25em;line-height:1.4;opacity:.88;max-width:32em;margin:0}
+.cover .cover-meta{margin-top:auto;display:flex;gap:1.4em;flex-wrap:wrap;font-size:.92em;opacity:.85;font-weight:600}
+.cover .accent-bar{position:absolute;left:0;top:0;bottom:0;width:10px;background:var(--slide-accent,#e9a23b)}
+.cover-logo{position:absolute;top:5.5%;right:6%;max-width:18%;max-height:11%;object-fit:contain;background:rgba(255,255,255,.95);border-radius:6px;padding:4px}
+.cover .goal-box{margin-top:1.2em;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);border-radius:10px;padding:.8em 1em;font-size:.98em;line-height:1.45;max-width:44em}
+.cover .goal-box b{display:block;font-size:.72em;letter-spacing:.14em;text-transform:uppercase;opacity:.7;margin-bottom:.3em}
+/* Roadmap slide */
+.road{background:#fff;color:#14201c}
+.road h3{font-size:1.55em;margin:0;letter-spacing:-.01em;font-weight:800}
+.road .sub{color:#5c6b64;font-size:.92em;margin:.25em 0 1em;font-weight:600}
+.road-head-logo{position:absolute;top:5%;right:6%;max-width:13%;max-height:8%;object-fit:contain}
+.tl{display:grid;grid-template-columns:19% repeat(4,1fr);gap:0;border:1px solid #d9ded9;border-radius:8px;overflow:hidden;flex:1}
+.tl > div{border-right:1px solid #e6eae6;border-bottom:1px solid #e6eae6;padding:.45em .55em;min-width:0}
+.tl .qh{background:#0f3b4d;color:#fff;font-weight:800;font-size:.85em;text-align:center;display:flex;align-items:center;justify-content:center}
+.tl .qh small{display:block;font-weight:600;opacity:.7;font-size:.82em}
+.tl .lane-label{font-weight:800;font-size:.86em;line-height:1.3;display:flex;flex-direction:column;justify-content:center;gap:.15em;background:#f7f8f7}
+.tl .lane-label small{color:#5c6b64;font-weight:600;font-size:.85em}
+.tl .cell{position:relative;background:#fff}
+.tl .bar{position:absolute;top:50%;transform:translateY(-50%);height:72%;border-radius:6px;color:#fff;font-size:.78em;font-weight:700;display:flex;align-items:center;padding:.2em .6em;line-height:1.25;overflow:hidden;z-index:2;white-space:nowrap}
+.tl .feat{position:absolute;bottom:4%;font-size:.72em;font-weight:700;color:#33413b;line-height:1.2;max-width:96%;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.tl .lane-label{overflow:hidden}
+.tl .lane-label .sum{color:#44524b;font-weight:600;font-size:.82em;line-height:1.35;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.tl .cell{min-height:0}
+.tl .feat::before{content:"◆";color:var(--slide-accent,#e9a23b);margin-right:.3em;font-size:.85em}
+.legend{display:flex;gap:1.1em;flex-wrap:wrap;margin-top:.8em;font-size:.8em;font-weight:700;color:#44524b}
+.legend i{width:.85em;height:.85em;border-radius:3px;display:inline-block;margin-right:.35em;vertical-align:-1px}
+.slide-foot{position:absolute;left:6%;right:6%;bottom:3.2%;font-size:.72em;color:#8a968f;font-weight:600;display:flex;justify-content:space-between;gap:1em}
+/* NNL */
+.nnl{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.9em;flex:1;min-height:0}
+.nnl-col{border-radius:10px;padding:.9em;overflow:hidden}
+.nnl-col h4{margin:0 0 .6em;font-size:1.05em;letter-spacing:.02em}
+.nnl-col .item{background:rgba(255,255,255,.75);border:1px solid rgba(20,32,28,.1);border-radius:8px;padding:.55em .65em;margin-bottom:.5em}
+.nnl-col .item b{display:block;font-size:.9em;line-height:1.3}
+.nnl-col .item span{font-size:.78em;color:#5c6b64;font-weight:600;line-height:1.35;display:block;margin-top:.15em}
+/* Summary */
+.sum-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:1.2em;flex:1;min-height:0}
+.sum-grid h4{margin:0 0 .5em;font-size:1em}
+.sum-grid ul{margin:0;padding-left:1.15em;line-height:1.5;font-size:.94em}
+.metric-box{background:#f2f5f3;border:1px solid #dfe5df;border-radius:10px;padding:.9em;margin-bottom:.7em}
+.metric-box b{font-size:1.5em;display:block;letter-spacing:-.02em}
+.metric-box span{font-size:.82em;color:#5c6b64;font-weight:700}
+.notes-box{background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:14px;line-height:1.55;white-space:pre-wrap;max-height:260px;overflow:auto}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(20px);background:#14201c;color:#fff;padding:11px 18px;border-radius:999px;font-weight:700;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:50;max-width:92vw;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.empty{border:1px dashed var(--line);border-radius:10px;padding:16px;text-align:center;color:var(--muted);font-size:14px;line-height:1.5}
+.file-row{display:flex;gap:8px;flex-wrap:wrap}
+.csv-note{font-size:13px;color:var(--muted);line-height:1.55;margin:10px 0 14px}
+details.llm{margin-top:10px}
+details.llm summary{cursor:pointer;font-weight:700;font-size:14px;padding:8px 0;min-height:38px}
+details.llm pre{white-space:pre-wrap;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:12.5px;line-height:1.55;max-height:300px;overflow:auto;font-family:"IBM Plex Mono",monospace}
+
+/* Suite shell + side menu */
+.shell{max-width:1440px;margin:0 auto;padding:18px 16px 56px;display:grid;grid-template-columns:236px minmax(0,1fr);gap:20px;align-items:start}
+.main-col{min-width:0}
+.sidenav{position:sticky;top:76px;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px 12px}
+.sidenav h3{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:14px 8px 6px}
+.sidenav h3:first-child{margin-top:2px}
+.nav-item{display:flex;align-items:center;gap:9px;width:100%;text-align:left;background:transparent;border:1px solid transparent;border-radius:10px;padding:10px;font-weight:700;font-size:14.5px;color:var(--ink);cursor:pointer;min-height:44px}
+.nav-item:hover{background:var(--panel-2)}
+.nav-item[aria-current="true"]{background:var(--panel-2);border-color:var(--line)}
+.nav-item .grow,.nav-static .grow{flex:1;min-width:0}
+.nav-sub{display:block;font-size:12px;color:var(--muted);font-weight:600;margin-top:1px;line-height:1.35}
+.tag{font-family:"IBM Plex Mono",monospace;font-size:10px;font-weight:600;letter-spacing:.05em;padding:3px 7px;border-radius:999px;background:var(--green-bg);color:var(--green);border:1px solid #8fd0ab;flex:none}
+.tag.plan{background:var(--amber-bg);color:#92580a;border-color:#f5d48a}
+@media (prefers-color-scheme: dark){ .tag.plan{color:#f5c86e} }
+.nav-static{display:flex;align-items:center;gap:9px;padding:8px 10px;font-size:13.5px;font-weight:600;color:var(--muted)}
+@media (max-width:980px){
+  .shell{grid-template-columns:1fr}
+  .sidenav{position:static;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+  .sidenav h3{width:100%;margin-top:8px}
+  .nav-item{width:auto;flex:1 1 210px}
+  .nav-static{width:auto;flex:1 1 160px}
+}
+.view[hidden]{display:none}
+
+/* Gantt */
+.g-toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.g-chart{border:1px solid var(--line);border-radius:10px;background:var(--panel);overflow:hidden;--glabel:212px}
+.g-head{display:grid;grid-template-columns:var(--glabel) 1fr;border-bottom:1px solid var(--line);background:var(--panel-2)}
+.g-corner{padding:8px 12px;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;white-space:nowrap;overflow:hidden}
+.g-months{display:flex;min-width:0}
+.g-month{flex:1;border-left:1px solid var(--line);padding:8px 4px;font-size:11px;font-weight:700;color:var(--muted);white-space:nowrap;overflow:hidden;text-align:center}
+.g-body{position:relative}
+.g-grid{position:absolute;top:0;bottom:0;left:var(--glabel);right:0;display:flex;pointer-events:none}
+.g-grid div{flex:1;border-left:1px solid var(--line);opacity:.5}
+.g-row{display:grid;grid-template-columns:var(--glabel) 1fr;border-bottom:1px solid var(--line);height:46px}
+.g-row:last-child{border-bottom:0}
+.g-label{padding:6px 12px;font-size:13px;line-height:1.3;display:flex;flex-direction:column;justify-content:center;min-width:0}
+.g-label b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.g-label small{color:var(--muted);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.g-track{position:relative;min-width:0}
+.g-bar{position:absolute;top:50%;transform:translateY(-50%);height:20px;border-radius:5px;background:color-mix(in srgb, var(--teal) 28%, var(--panel));border:1px solid var(--teal);overflow:hidden;min-width:4px}
+.g-bar .fill{position:absolute;top:0;bottom:0;left:0;background:var(--teal);opacity:.85}
+.g-bar.crit{border-color:var(--red);box-shadow:0 0 0 1.5px var(--red)}
+.g-bar.crit .fill{background:var(--red)}
+.g-bar .pct{position:absolute;right:5px;top:50%;transform:translateY(-50%);font-size:10.5px;font-weight:800;color:var(--ink)}
+.g-mile{position:absolute;top:50%;width:14px;height:14px;background:var(--accent);border:2px solid var(--accent-ink);transform:translate(-50%,-50%) rotate(45deg);border-radius:3px}
+.g-mile.crit{background:var(--red);border-color:var(--red)}
+.g-arrows{position:absolute;top:0;bottom:0;left:var(--glabel);width:calc(100% - var(--glabel));height:100%;pointer-events:none;overflow:visible}
+.g-today{position:absolute;top:0;bottom:0;width:0;border-left:2px dashed var(--red);pointer-events:none;z-index:3}
+.g-today span{position:absolute;top:4px;left:5px;font-size:10.5px;font-weight:800;color:var(--red);white-space:nowrap}
+@media (max-width:640px){ .g-chart{--glabel:126px} .g-label{font-size:12px;padding:6px 8px} .g-month{font-size:9.5px;padding:7px 2px} .g-corner{font-size:9.5px;padding:7px 8px} }
+.g-legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;font-size:12.5px;font-weight:700;color:var(--muted)}
+.g-legend i{width:12px;height:12px;border-radius:3px;display:inline-block;margin-right:5px;vertical-align:-1px}
+
+/* Suite guide */
+.mod-row{display:flex;gap:12px;align-items:flex-start;padding:13px 0;border-bottom:1px solid var(--line)}
+.mod-row:last-child{border-bottom:0}
+.mod-row .grow{flex:1;min-width:0}
+.mod-row b{font-size:15px}
+.mod-row p{margin:3px 0 0;font-size:13.5px;color:var(--muted);line-height:1.5}
+.order-list{margin:0;padding-left:20px;line-height:1.55;font-size:14.5px}
+.order-list li{margin-bottom:9px}
+.order-list li b{font-weight:800}
+code.path{font-family:"IBM Plex Mono",monospace;font-size:12.5px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:1px 6px}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <span class="hint" id="barHint">Answer the questionnaire, add epics &amp; features, pick a template — then download a real PowerPoint file.</span>
+    <div class="seg" role="group" aria-label="Template" id="tmplSeg">
+      <button type="button" data-template="timeline" aria-pressed="true">Timeline roadmap</button>
+      <button type="button" data-template="nnl" aria-pressed="false">Now / Next / Later</button>
+      <button type="button" data-template="executive" aria-pressed="false">Executive (3 slides)</button>
+    </div>
+    <button class="btn" id="btnExample" type="button">Load example</button>
+    <button class="btn primary" id="btnDownload" type="button">⬇ Download .pptx</button>
+  </div>
+</div>
+
+<div class="shell">
+  <aside class="sidenav" aria-label="Suite modules">
+    <h3>Modules</h3>
+    <button type="button" class="nav-item" data-view="roadmap" aria-current="true"><span class="grow">Roadmap Deck<span class="nav-sub">Questionnaire → roadmap .pptx</span></span><span class="tag">Live</span></button>
+    <button type="button" class="nav-item" data-view="gantt" aria-current="false"><span class="grow">Gantt Chart<span class="nav-sub">Project plan, dependencies, critical path</span></span><span class="tag">Live</span></button>
+    <h3>Guide</h3>
+    <button type="button" class="nav-item" data-view="about" aria-current="false"><span class="grow">Suite guide &amp; roadmap<span class="nav-sub">How it fits together · what to build next</span></span></button>
+    <h3>Coming next</h3>
+    <div class="nav-static"><span class="grow">Status Report Deck</span><span class="tag plan">Next</span></div>
+    <div class="nav-static"><span class="grow">RAID Log</span><span class="tag plan">Planned</span></div>
+    <div class="nav-static"><span class="grow">Charter &amp; Kickoff Deck</span><span class="tag plan">Planned</span></div>
+    <div class="nav-static"><span class="grow">Portfolio Dashboard</span><span class="tag plan">Planned</span></div>
+  </aside>
+  <div class="main-col">
+  <section class="view" id="view-roadmap" aria-label="Roadmap Deck module">
+<div class="layout">
+  <!-- ============ BUILDER ============ -->
+  <div>
+    <section class="card" aria-labelledby="h-setup">
+      <div class="card-head"><span class="step-num">STEP 1</span><div><h2 id="h-setup">Deck questionnaire</h2><p>These answers become the cover slide, the summary copy, and the brief for the draft assistant.</p></div></div>
+      <div class="card-body">
+        <div class="field"><label for="fProduct">Product / initiative name</label><input type="text" id="fProduct" placeholder="e.g. Atlas Customer Platform"></div>
+        <div class="field"><label for="fTagline">One-line vision or tagline</label><input type="text" id="fTagline" placeholder="e.g. One place for every customer conversation"></div>
+        <div class="grid2">
+          <div class="field"><label for="fAudience">Audience for this deck</label><input type="text" id="fAudience" placeholder="e.g. Executive leadership"></div>
+          <div class="field"><label for="fPresenter">Presenter / owner</label><input type="text" id="fPresenter" placeholder="e.g. Priya Nair, Product Lead"></div>
+        </div>
+        <div class="grid3">
+          <div class="field"><label for="fStart">Project start</label><input type="date" id="fStart"></div>
+          <div class="field"><label for="fEnd">Project end</label><input type="date" id="fEnd"></div>
+          <div class="field"><label for="fDate">Deck date</label><input type="date" id="fDate"></div>
+        </div>
+        <p class="csv-note" style="margin:-2px 0 12px">The timeline is drawn by quarter between the project start and end dates — a project can run up to 2 years (8 quarters).</p>
+        <div class="field"><label for="fGoal">Goal — what should be true by the end of the project?</label><textarea id="fGoal" placeholder="e.g. Cut onboarding time in half and move 80% of support volume to self-serve"></textarea></div>
+        <div class="grid2">
+          <div class="field"><label for="fMetric">Headline metric</label><input type="text" id="fMetric" placeholder="e.g. Activation rate"></div>
+          <div class="field"><label for="fMetricTarget">Target</label><input type="text" id="fMetricTarget" placeholder="e.g. 42% → 65%"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="h-brand">
+      <div class="card-head"><span class="step-num">STEP 2</span><div><h2 id="h-brand">Brand kit — common elements</h2><p>Applied to every slide: logo, colors, company name, and footer.</p></div></div>
+      <div class="card-body">
+        <div class="field"><label for="fCompany">Company name</label><input type="text" id="fCompany" placeholder="e.g. Northwind Labs"></div>
+        <div class="field"><label for="fLogo">Logo image (PNG / JPG / SVG)</label><input type="file" id="fLogo" accept="image/*"></div>
+        <div class="logo-preview" id="logoPreview"><span>No logo yet — upload one and it appears on the cover and roadmap slides, in the preview and the .pptx.</span></div>
+        <div class="grid2" style="margin-top:12px">
+          <div class="field"><label>Primary color</label><div class="color-row"><input type="color" id="fPrimary" value="#0f3b4d"><code id="primaryHex">#0F3B4D</code></div></div>
+          <div class="field"><label>Accent color</label><div class="color-row"><input type="color" id="fAccent" value="#e9a23b"><code id="accentHex">#E9A23B</code></div></div>
+        </div>
+        <div class="field"><label for="fFooter">Footer text</label><input type="text" id="fFooter" placeholder="e.g. Confidential — internal planning"></div>
+        <div class="field"><label for="fLogoPos">Logo position</label>
+          <select id="fLogoPos"><option value="tr">Top right</option><option value="tl">Top left</option></select>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="h-epics">
+      <div class="card-head"><span class="step-num">STEP 3</span><div><h2 id="h-epics">Epics &amp; features</h2><p>One row per epic, with start and end dates — or import the whole list from a CSV. Features sit inside their epic and land as milestones on the bar.</p></div></div>
+      <div class="card-body">
+        <div class="file-row">
+          <label class="btn" for="fCsv" style="cursor:pointer">Import epics &amp; features (.csv)</label>
+          <input type="file" id="fCsv" accept=".csv,text/csv" hidden>
+          <button class="btn" id="btnCsvTemplate" type="button">Download CSV template</button>
+        </div>
+        <p class="csv-note">One row per epic or feature. Columns: <b>type, name, owner, start, end, status, summary, epic, date</b> — a feature row names its epic in the <b>epic</b> column and its landing date in <b>date</b>. Dates can be 2027-03-15, 3/15/2027, or Q1 2027. Importing replaces the list below and widens the Step 1 project dates to fit.</p>
+        <div id="epicList"></div>
+        <button class="btn accent" id="btnAddEpic" type="button">+ Add epic</button>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="h-draft">
+      <div class="card-head"><span class="step-num">STEP 4</span><div><h2 id="h-draft">Draft assistant — connect an LLM</h2><p>Your questionnaire answers and epic list become the prompt. Connect your own LLM key and the model writes the executive summary and speaker notes — or draft locally with no key. Edit anything before you download.</p></div></div>
+      <div class="card-body">
+        <div class="grid2">
+          <div class="field"><label for="fProvider">AI provider</label>
+            <select id="fProvider"><option value="anthropic">Anthropic (Muse)</option><option value="openai">OpenAI (GPT)</option></select>
+          </div>
+          <div class="field"><label for="fModel">Model</label><input type="text" id="fModel" value="claude-sonnet-4-5"></div>
+        </div>
+        <div class="field"><label for="fApiKey">API key</label><input type="password" id="fApiKey" placeholder="Paste your provider API key" autocomplete="off">
+          <p class="csv-note" style="margin:6px 0 0">The key is held in this tab only — it goes straight to the provider together with your answers, and is never saved.</p>
+        </div>
+        <div class="file-row">
+          <button class="btn primary" id="btnAi" type="button">✦ Generate with AI</button>
+          <button class="btn" id="btnDraft" type="button">Draft locally (no key)</button>
+          <button class="btn" id="btnCopyPrompt" type="button">Copy LLM prompt</button>
+        </div>
+        <p class="csv-note" id="aiStatus" style="margin:10px 0 0" hidden></p>
+        <div class="field" style="margin-top:14px"><label for="fSummary">Executive summary (used on the Executive template)</label><textarea id="fSummary" style="min-height:110px" placeholder="Generate it, or write your own…"></textarea></div>
+        <div class="field"><label for="fNotes">Speaker notes (added to the .pptx notes)</label><textarea id="fNotes" style="min-height:110px" placeholder="Generate them, or write your own…"></textarea></div>
+        <details class="llm"><summary>See the prompt this sends to an LLM</summary><pre id="llmPrompt"></pre></details>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="h-checks">
+      <div class="card-head"><span class="step-num">STEP 5</span><div><h2 id="h-checks">Checks before you ship it</h2><p>Flags problems that would make the slide hard to read or defend.</p></div></div>
+      <div class="card-body"><div id="checks"></div>
+        <div class="file-row" style="margin-top:12px">
+          <button class="btn" id="btnExportJson" type="button">Download project file (.json)</button>
+          <label class="btn" for="fImport" style="cursor:pointer">Open project file (.json)</label>
+          <input type="file" id="fImport" accept="application/json,.json" hidden>
+          <button class="btn danger" id="btnClear" type="button">Clear all</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ============ PREVIEW ============ -->
+  <div class="preview-col">
+    <div class="preview-head"><h2>Live slide preview</h2><span class="spacer"></span><span id="slideCount" style="font-size:13px;color:var(--muted);font-weight:700"></span></div>
+    <div id="preview"></div>
+  </div>
+</div>
+  </section>
+
+  <!-- ============ GANTT MODULE ============ -->
+  <section class="view" id="view-gantt" aria-label="Gantt Chart module" hidden>
+    <div class="layout">
+      <div>
+        <section class="card" aria-labelledby="h-tasks">
+          <div class="card-head"><span class="step-num">PLAN</span><div><h2 id="h-tasks">Tasks &amp; milestones</h2><p>The plan reuses the project dates (Roadmap module, Step 1) and the brand kit. Link a task to the one it depends on and the chart draws the arrow — and works out the critical path.</p></div></div>
+          <div class="card-body">
+            <div class="g-toolbar">
+              <button class="btn" id="btnSeed" type="button">Seed from epics &amp; features</button>
+              <label class="btn" for="fTaskCsv" style="cursor:pointer">Import tasks (.csv)</label>
+              <input type="file" id="fTaskCsv" accept=".csv,text/csv" hidden>
+              <button class="btn" id="btnTaskCsvTemplate" type="button">CSV template</button>
+            </div>
+            <p class="csv-note">CSV columns: <b>type, name, owner, start, end, progress, depends</b> — type is task or milestone, and <b>depends</b> names the task that must finish first. Seeding turns each epic into a task and each dated feature into a milestone.</p>
+            <div id="taskList"></div>
+            <button class="btn accent" id="btnAddTask" type="button">+ Add task</button>
+          </div>
+        </section>
+        <section class="card" aria-labelledby="h-gchecks">
+          <div class="card-head"><span class="step-num">CHECK</span><div><h2 id="h-gchecks">Plan checks</h2><p>Date and dependency problems that would break the plan in a review.</p></div></div>
+          <div class="card-body"><div id="ganttChecks"></div></div>
+        </section>
+      </div>
+      <div class="preview-col">
+        <div class="preview-head"><h2>Gantt chart</h2><span class="spacer"></span>
+          <div class="seg" role="group" aria-label="Gantt options"><button type="button" id="btnCrit" aria-pressed="true">Critical path</button></div>
+          <button class="btn primary" id="btnGanttDownload" type="button">⬇ Download Gantt .pptx</button>
+        </div>
+        <div id="ganttChart"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SUITE GUIDE ============ -->
+  <section class="view" id="view-about" aria-label="Suite guide" hidden>
+    <section class="card" aria-labelledby="h-spine">
+      <div class="card-head"><span class="step-num">SUITE</span><div><h2 id="h-spine">How the suite fits together — one shared spine</h2><p>Every module reads from the same project file, so nothing gets typed twice.</p></div></div>
+      <div class="card-body">
+        <p style="margin:0 0 6px;font-size:14.5px;line-height:1.6">The questionnaire, brand kit, epics, features, and tasks live in <b>one project</b>. Your roadmap epics seed the Gantt plan; the Gantt milestones will feed the status report; the brand kit (logo, colors, footer) and the .pptx engine are shared by every deck. Saving the project file in the Roadmap module (Step 5) now carries the tasks too — reopen it and every module picks up where you left off.</p>
+        <div class="mod-row"><span class="grow"><b>Roadmap Deck</b><p>Questionnaire → cover, timeline / Now-Next-Later / Executive slides. Epics &amp; features, CSV import, 2-year date-based timeline, LLM draft assistant, pre-flight checks.</p></span><span class="tag">Live</span></div>
+        <div class="mod-row"><span class="grow"><b>Gantt Chart</b><p>Tasks with owners, dates, % complete, finish-to-start dependencies, milestones, and a computed critical path. Seeds from your epics, imports its own CSV, exports a plan slide in the same brand kit.</p></span><span class="tag">Live</span></div>
+        <div class="mod-row"><span class="grow"><b>Status Report Deck</b><p>The weekly PMO artifact: RAG health, what shipped, what's next, risks and decisions needed. Should pre-fill from epics and tasks and remember last week's report.</p></span><span class="tag plan">Next</span></div>
+        <div class="mod-row"><span class="grow"><b>RAID Log</b><p>Risks, assumptions, issues, and dependencies as a register, plus a one-pager slide for steerco. Feeds the status deck's risks section.</p></span><span class="tag plan">Planned</span></div>
+        <div class="mod-row"><span class="grow"><b>Charter &amp; Kickoff Deck</b><p>Scope, objectives, success criteria, team, and timeline — mostly a new arrangement of answers the questionnaire already collects.</p></span><span class="tag plan">Planned</span></div>
+        <div class="mod-row"><span class="grow"><b>Portfolio Dashboard</b><p>Health rollup across several saved projects for the PMO / executive view. Only worth building once you have a few projects saved.</p></span><span class="tag plan">Later</span></div>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="h-order">
+      <div class="card-head"><span class="step-num">ORDER</span><div><h2 id="h-order">Recommended build order</h2><p>Each step reuses what the previous one already stores.</p></div></div>
+      <div class="card-body">
+        <ol class="order-list">
+          <li><b>Status Report Deck next.</b> It's the highest-frequency PMO artifact — weekly, not quarterly — and it can pre-fill from the epics, tasks, and at-risk flags already in the project file.</li>
+          <li><b>RAID Log after that.</b> Same register pattern as the task list, and its risks flow straight into the status deck.</li>
+          <li><b>Charter &amp; Kickoff Deck.</b> Low new data — it rearranges the questionnaire, brand kit, and timeline you already have.</li>
+          <li><b>Portfolio Dashboard last.</b> A rollup needs several saved projects before it means anything.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="h-repo">
+      <div class="card-head"><span class="step-num">REPO</span><div><h2 id="h-repo">Publishing it as one repo</h2><p>One new repo, separate from the CMS checklist (different audience). Suggested shape when it moves to GitHub:</p></div></div>
+      <div class="card-body">
+        <p style="margin:0;font-size:14.5px;line-height:1.7"><code class="path">modules/roadmap</code> · <code class="path">modules/gantt</code> · <code class="path">modules/status</code> — one folder per module<br><code class="path">shared/</code> — brand kit, project data model, .pptx engine, CSV import<br><code class="path">templates/</code> — the downloadable CSV templates<br>Same flow as your other utilities: you create the repo, add it to the GitHub App, the code gets pushed, and Pages hosts the site.</p>
+      </div>
+    </section>
+  </section>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+"use strict";
+/* ---------------- State ---------------- */
+var STATUS = {
+  "done":       {label:"Done",        color:"#2e7d5b"},
+  "progress":   {label:"In progress", color:"#147a6e"},
+  "planned":    {label:"Planned",     color:"#7a8a83"},
+  "risk":       {label:"At risk",     color:"#c2410c"}
+};
+var EPIC_COLORS = ["#0f3b4d","#147a6e","#b7791f","#7c4a21","#3f6212","#9a3412","#155e75","#4d7c0f"];
+var uid = 1;
+function newEpic(name, owner, s, e, status, summary){
+  return {id: uid++, name: name||"", owner: owner||"", start: s||"", end: e||"", status: status||"planned", summary: summary||"", features: []};
+}
+function newFeature(name, date, status){ return {id: uid++, name: name||"", date: date||"", status: status||"planned"}; }
+function newTask(name, owner, s, e, type){ return {id: uid++, name: name||"", owner: owner||"", start: s||"", end: e||"", progress: 0, dep: "", type: type||"task"}; }
+
+var state = {
+  template: "timeline",
+  product:"", tagline:"", audience:"", presenter:"", startDate:"", endDate:"", date:"",
+  goal:"", metric:"", metricTarget:"",
+  company:"", footer:"", primary:"#0f3b4d", accent:"#e9a23b", logoPos:"tr",
+  logoData:null, logoType:null,
+  summary:"", notes:"",
+  epics: [], tasks: [], showCrit: true
+};
+
+function $(id){ return document.getElementById(id); }
+function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+function toast(msg){ var t=$("toast"); t.textContent=msg; t.classList.add("show"); setTimeout(function(){ t.classList.remove("show"); }, 2600); }
+
+/* ---------------- Dates ---------------- */
+var MONTHS=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+function parseD(s){ if(!s) return null; var p=String(s).split("-"); if(p.length!==3) return null; var d=new Date(+p[0],+p[1]-1,+p[2]); return isNaN(d.getTime())?null:d; }
+function toISO(d){ return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
+function addMonths(d,n){ return new Date(d.getFullYear(), d.getMonth()+n, 1); }
+function fmtMY(d){ return MONTHS[d.getMonth()]+" "+d.getFullYear(); }
+function fmtRange(a,b){ if(!a||!b) return "dates not set"; return fmtMY(a)===fmtMY(b) ? fmtMY(a) : fmtMY(a)+" – "+fmtMY(b); }
+function projStart(){ return parseD(state.startDate) || new Date(new Date().getFullYear()+1,0,1); }
+function projEnd(){ var s=projStart(), e=parseD(state.endDate); if(!e||e<s) e=new Date(s.getFullYear(),11,31); return e; }
+function epStart(ep){ return parseD(ep.start) || projStart(); }
+function epEnd(ep){ return parseD(ep.end) || projEnd(); }
+function rangeLabel(){ var s=projStart(), e=projEnd(); return s.getFullYear()===e.getFullYear() ? String(s.getFullYear()) : s.getFullYear()+"–"+e.getFullYear(); }
+function rangeLong(){ return fmtMY(projStart())+" – "+fmtMY(projEnd()); }
+function gridInfo(){
+  var s=projStart(), e=projEnd();
+  var first=new Date(s.getFullYear(), Math.floor(s.getMonth()/3)*3, 1);
+  var cols=[], cur=new Date(first);
+  while(cur<=e && cols.length<12){ cols.push(new Date(cur)); cur=addMonths(cur,3); }
+  if(!cols.length) cols=[first];
+  return {cols:cols, start:first, end:addMonths(first, cols.length*3)};
+}
+function colIndex(d, g){
+  var m=(d.getFullYear()-g.start.getFullYear())*12+(d.getMonth()-g.start.getMonth());
+  var i=Math.floor(m/3); if(i<0) i=0; if(i>g.cols.length-1) i=g.cols.length-1; return i;
+}
+
+/* ---------------- Example ---------------- */
+function loadExample(){
+  uid = 1;
+  state.product="Atlas Customer Platform"; state.tagline="One place for every customer conversation";
+  state.audience="Executive leadership"; state.presenter="Priya Nair, Product Lead";
+  state.startDate="2027-01-01"; state.endDate="2028-06-30"; state.date="2027-01-15";
+  state.goal="Cut onboarding time in half, move 80% of support volume to self-serve, and launch the mobile app our enterprise customers keep asking for.";
+  state.metric="Activation rate"; state.metricTarget="42% → 65%";
+  state.company="Northwind Labs"; state.footer="Confidential — internal planning";
+  state.primary="#0f3b4d"; state.accent="#e9a23b";
+  state.epics=[];
+  var e1=newEpic("Guided Onboarding","Design + Web","2027-01-01","2027-06-30","progress","Checklist-based setup with templates per industry, replacing the 6-week manual process.");
+  e1.features.push(newFeature("Onboarding checklist","2027-02-15","done"), newFeature("Industry templates","2027-05-20","progress"), newFeature("Progress nudges","2027-06-10","planned"));
+  var e2=newEpic("Self-Serve Billing","Platform","2027-01-01","2028-03-31","planned","Invoices, seats, and payment methods without a support ticket.");
+  e2.features.push(newFeature("Invoice history","2027-03-15","progress"), newFeature("Seat management","2028-02-01","planned"));
+  var e3=newEpic("Mobile App","Mobile","2027-07-01","2028-06-30","planned","Native iOS and Android apps for approvals and replies on the go.");
+  e3.features.push(newFeature("iOS beta","2028-03-01","planned"), newFeature("Android launch","2028-06-15","planned"));
+  var e4=newEpic("AI Reply Assistant","ML Team","2028-01-01","2028-06-30","risk","Draft replies from ticket history; needs the data-retention review before launch.");
+  e4.features.push(newFeature("Draft suggestions","2028-02-15","planned"), newFeature("Tone controls","2028-05-20","planned"));
+  state.epics.push(e1,e2,e3,e4);
+  seedTasks(false);
+  state.summary=""; state.notes="";
+  syncForm(); generateCopy(false); renderAll();
+  toast("Example loaded — edit anything, then download the .pptx");
+}
+
+/* ---------------- Form sync ---------------- */
+function syncForm(){
+  $("fProduct").value=state.product; $("fTagline").value=state.tagline; $("fAudience").value=state.audience;
+  $("fPresenter").value=state.presenter; $("fStart").value=state.startDate; $("fEnd").value=state.endDate; $("fDate").value=state.date;
+  $("fGoal").value=state.goal; $("fMetric").value=state.metric; $("fMetricTarget").value=state.metricTarget;
+  $("fCompany").value=state.company; $("fFooter").value=state.footer;
+  $("fPrimary").value=state.primary; $("fAccent").value=state.accent; $("fLogoPos").value=state.logoPos;
+  $("primaryHex").textContent=state.primary.toUpperCase(); $("accentHex").textContent=state.accent.toUpperCase();
+  $("fSummary").value=state.summary; $("fNotes").value=state.notes;
+  document.querySelectorAll("[data-template]").forEach(function(b){ b.setAttribute("aria-pressed", b.getAttribute("data-template")===state.template ? "true":"false"); });
+}
+function bind(id, key, isNum){
+  $(id).addEventListener("input", function(e){ state[key]=e.target.value; renderPreview(); renderChecks(); renderPrompt(); renderGanttChart(); renderGanttChecks(); });
+}
+bind("fProduct","product"); bind("fTagline","tagline"); bind("fAudience","audience"); bind("fPresenter","presenter");
+bind("fStart","startDate"); bind("fEnd","endDate"); bind("fDate","date"); bind("fGoal","goal"); bind("fMetric","metric"); bind("fMetricTarget","metricTarget");
+bind("fCompany","company"); bind("fFooter","footer");
+$("fSummary").addEventListener("input", function(e){ state.summary=e.target.value; renderPreview(); });
+$("fNotes").addEventListener("input", function(e){ state.notes=e.target.value; });
+$("fPrimary").addEventListener("input", function(e){ state.primary=e.target.value; $("primaryHex").textContent=state.primary.toUpperCase(); renderPreview(); });
+$("fAccent").addEventListener("input", function(e){ state.accent=e.target.value; $("accentHex").textContent=state.accent.toUpperCase(); renderPreview(); });
+$("fLogoPos").addEventListener("change", function(e){ state.logoPos=e.target.value; renderPreview(); });
+$("fLogo").addEventListener("change", function(e){
+  var f=e.target.files && e.target.files[0]; if(!f) return;
+  var r=new FileReader();
+  r.onload=function(){
+    state.logoData=r.result;
+    state.logoType = f.type.indexOf("svg")>-1 ? "svg" : (f.type.indexOf("png")>-1 ? "png" : "jpg");
+    renderLogoPreview(); renderPreview(); toast("Logo added — it will be embedded in the .pptx");
+  };
+  r.readAsDataURL(f);
+});
+function renderLogoPreview(){
+  var box=$("logoPreview");
+  if(state.logoData){ box.innerHTML='<img src="'+state.logoData+'" alt="Uploaded logo"><span>Logo ready. It appears on the cover and roadmap slides and is embedded in the downloaded file.</span>'; }
+  else { box.innerHTML='<span>No logo yet — upload one and it appears on the cover and roadmap slides, in the preview and the .pptx.</span>'; }
+}
+document.querySelectorAll("[data-template]").forEach(function(b){
+  b.addEventListener("click", function(){ state.template=b.getAttribute("data-template"); syncForm(); renderPreview(); });
+});
+
+/* ---------------- Epics editor ---------------- */
+function spanLabel(ep){
+  var a=parseD(ep.start), b=parseD(ep.end);
+  if(!a||!b) return "Set both dates";
+  if(b<a) return "Ends before it starts";
+  var m=(b.getFullYear()-a.getFullYear())*12+(b.getMonth()-a.getMonth())+1;
+  return fmtRange(a,b)+" · "+m+" mo";
+}
+function statusOptions(sel){
+  var out=""; Object.keys(STATUS).forEach(function(k){ out+='<option value="'+k+'"'+(k===sel?" selected":"")+'>'+STATUS[k].label+'</option>'; }); return out;
+}
+function renderEpics(){
+  var wrap=$("epicList");
+  if(!state.epics.length){ wrap.innerHTML='<div class="empty">No epics yet.<br>Add your first epic — give it a name, an owner, and the quarters it spans.</div>'; return; }
+  wrap.innerHTML = state.epics.map(function(ep, i){
+    var color = EPIC_COLORS[i % EPIC_COLORS.length];
+    var feats = ep.features.map(function(f){
+      return '<div class="feat-row" data-epic="'+ep.id+'" data-feat="'+f.id+'">'
+        + '<input type="text" data-f="name" value="'+esc(f.name)+'" placeholder="Feature name" aria-label="Feature name">'
+        + '<input type="date" data-f="date" value="'+esc(f.date)+'" aria-label="Feature date">'
+        + '<select data-f="status" aria-label="Feature status">'+statusOptions(f.status)+'</select>'
+        + '<button type="button" class="icon-btn" data-act="delFeat" title="Remove feature" aria-label="Remove feature">×</button></div>';
+    }).join("");
+    return '<div class="epic" data-epic="'+ep.id+'">'
+      + '<div class="epic-top"><span class="epic-dot" style="background:'+color+'"></span><strong>'+esc(ep.name||("Epic "+(i+1)))+'</strong>'
+      + '<button type="button" class="icon-btn" data-act="delEpic" title="Remove epic" aria-label="Remove epic">×</button></div>'
+      + '<div class="field"><label>Epic name</label><input type="text" data-f="name" value="'+esc(ep.name)+'" placeholder="e.g. Guided Onboarding"></div>'
+      + '<div class="grid2"><div class="field"><label>Owner / team</label><input type="text" data-f="owner" value="'+esc(ep.owner)+'" placeholder="e.g. Platform team"></div>'
+      + '<div class="field"><label>Status</label><select data-f="status">'+statusOptions(ep.status)+'</select></div></div>'
+      + '<div class="grid3"><div class="field"><label>Start date</label><input type="date" data-f="start" value="'+esc(ep.start)+'"></div>'
+      + '<div class="field"><label>End date</label><input type="date" data-f="end" value="'+esc(ep.end)+'"></div>'
+      + '<div class="field"><label>Span</label><input type="text" value="'+esc(spanLabel(ep))+'" disabled></div></div>'
+      + '<div class="field"><label>One-line summary</label><input type="text" data-f="summary" value="'+esc(ep.summary)+'" placeholder="What ships and why it matters"></div>'
+      + '<div class="features"><h4>Features / milestones</h4>'+feats
+      + '<button type="button" class="btn small" data-act="addFeat">+ Add feature</button></div></div>';
+  }).join("");
+}
+$("epicList").addEventListener("input", function(e){
+  var epicEl=e.target.closest(".epic"); if(!epicEl) return;
+  var ep=state.epics.find(function(x){ return x.id==epicEl.getAttribute("data-epic"); }); if(!ep) return;
+  var featRow=e.target.closest(".feat-row"); var field=e.target.getAttribute("data-f"); if(!field) return;
+  var val=e.target.value;
+  if(featRow){ var f=ep.features.find(function(x){ return x.id==featRow.getAttribute("data-feat"); }); if(!f) return;
+    f[field]=val;
+  } else {
+    ep[field]=val;
+  }
+  renderPreview(); renderChecks();
+});
+$("epicList").addEventListener("change", function(e){ /* selects fire input in most browsers; re-render editor for span label */ renderEpics(); renderPreview(); renderChecks(); });
+$("epicList").addEventListener("click", function(e){
+  var btn=e.target.closest("[data-act]"); if(!btn) return;
+  var epicEl=e.target.closest(".epic"); var ep=state.epics.find(function(x){ return x.id==epicEl.getAttribute("data-epic"); });
+  var act=btn.getAttribute("data-act");
+  if(act==="delEpic"){ state.epics=state.epics.filter(function(x){ return x!==ep; }); }
+  if(act==="addFeat" && ep){ ep.features.push(newFeature("", ep.start, "planned")); }
+  if(act==="delFeat" && ep){ var row=e.target.closest(".feat-row"); ep.features=ep.features.filter(function(x){ return x.id!=row.getAttribute("data-feat"); }); }
+  renderAll();
+});
+$("btnAddEpic").addEventListener("click", function(){
+  var s=projStart();
+  state.epics.push(newEpic("", "", toISO(s), toISO(new Date(s.getFullYear(), s.getMonth()+6, 0)), "planned", ""));
+  renderAll();
+  var inputs=document.querySelectorAll("#epicList .epic:last-child input[data-f='name']");
+  if(inputs.length) inputs[0].focus();
+});
+
+/* ---------------- Checks ---------------- */
+function computeChecks(){
+  var out=[];
+  if(!state.product) out.push({t:"bad", m:"No product name yet — the cover slide needs a title."});
+  if(!state.epics.length) out.push({t:"bad", m:"No epics — the roadmap slide will be empty. Add them in Step 3, or import a CSV there."});
+  var psd=parseD(state.startDate), ped=parseD(state.endDate);
+  if(psd && ped && ped<psd) out.push({t:"bad", m:"The project end date is before the start date — fix it in Step 1."});
+  var ps=projStart(), pe=projEnd(), g=gridInfo();
+  if(g.cols.length>8) out.push({t:"warn", m:"The project runs "+rangeLong()+" — "+g.cols.length+" quarters. Decks are designed for up to 2 years (8 quarters); past that, the timeline gets hard to read."});
+  state.epics.forEach(function(ep,i){
+    var label=ep.name||("Epic "+(i+1));
+    var es=parseD(ep.start), ee=parseD(ep.end);
+    if(!es||!ee) out.push({t:"warn", m:"“"+label+"” is missing a start or end date — until both are set, it is drawn across the whole project."});
+    else if(ee<es) out.push({t:"bad", m:"“"+label+"” ends ("+fmtMY(ee)+") before it starts ("+fmtMY(es)+")."});
+    else if(es<ps||ee>pe) out.push({t:"warn", m:"“"+label+"” ("+fmtRange(es,ee)+") sits outside the project window ("+rangeLong()+") — widen the dates in Step 1 or move the epic."});
+    if(!ep.owner) out.push({t:"warn", m:"“"+label+"” has no owner — roadmap reviews always ask who owns it."});
+    if(!ep.summary) out.push({t:"warn", m:"“"+label+"” has no one-line summary."});
+    ep.features.forEach(function(f){
+      var fd=parseD(f.date);
+      if(f.name && !fd) out.push({t:"warn", m:"Feature “"+f.name+"” has no date — it won't appear on the timeline."});
+      else if(f.name && fd && es && ee && (fd<es || fd>ee)) out.push({t:"warn", m:"Feature “"+f.name+"” lands in "+fmtMY(fd)+", outside “"+label+"” ("+fmtRange(es,ee)+")."});
+    });
+    if(ep.status==="risk" && !/risk|review|block|delay|depend/i.test(ep.summary)) out.push({t:"warn", m:"“"+label+"” is marked At risk but the summary doesn't say why — add the blocker."});
+  });
+  for(var a=0;a<state.epics.length;a++) for(var b=a+1;b<state.epics.length;b++){
+    var x=state.epics[a], y=state.epics[b];
+    if(x.owner && x.owner===y.owner && epStart(x)<=epEnd(y) && epStart(y)<=epEnd(x))
+      out.push({t:"warn", m:"“"+(x.name||"Epic")+"” and “"+(y.name||"Epic")+"” overlap and share the same owner ("+x.owner+") — check the team isn't double-booked."});
+  }
+  if(state.epics.length>6) out.push({t:"warn", m:state.epics.length+" epics is a lot for one slide — past 6, bars and labels get hard to read. The Executive template handles it best."});
+  if(!state.logoData && state.company) out.push({t:"warn", m:"No logo uploaded — the deck will use the company name (“"+state.company+"”) as text instead."});
+  else if(!state.logoData && !state.company) out.push({t:"warn", m:"No logo and no company name yet — the cover will only carry the generic “Product roadmap” label. Add one of them in Step 2."});
+  if(!out.length) out.push({t:"ok", m:"All checks pass — dates line up, every epic has an owner and a summary."});
+  else if(!out.some(function(c){return c.t==="bad";})) out.unshift({t:"ok", m:"Ready to download — the items below are polish, not blockers."});
+  return out;
+}
+function renderChecks(){
+  $("checks").innerHTML = computeChecks().map(function(c){
+    var icon = c.t==="bad" ? "⛔" : (c.t==="warn" ? "⚠️" : "✓");
+    return '<div class="check '+c.t+'"><span aria-hidden="true">'+icon+'</span><div>'+esc(c.m)+'</div></div>';
+  }).join("");
+}
+
+/* ---------------- Draft assistant ---------------- */
+function buildPrompt(){
+  var lines=[];
+  lines.push("You are a product manager writing a roadmap deck. Using ONLY the facts below, write:");
+  lines.push("1) A cover headline (max 8 words) and a one-sentence tagline.");
+  lines.push("2) An executive summary of 4–5 sentences for "+(state.audience||"the audience")+".");
+  lines.push("3) One sentence per epic explaining what ships and why it matters.");
+  lines.push("4) Speaker notes (about 120 words) that flag risks and the decision being asked for.");
+  lines.push("Do not invent dates, metrics, or features that are not listed.");
+  lines.push("");
+  lines.push("Product: "+(state.product||"(not given)"));
+  lines.push("Vision: "+(state.tagline||"(not given)"));
+  lines.push("Project goal: "+(state.goal||"(not given)"));
+  lines.push("Headline metric: "+(state.metric||"(not given)")+" — target "+(state.metricTarget||"(not given)"));
+  lines.push("Timeline: "+rangeLong()+" — from the project start date to the end date, planned by quarter.");
+  lines.push("Epics:");
+  state.epics.forEach(function(ep){
+    lines.push("- "+(ep.name||"Untitled epic")+" ("+(ep.owner||"no owner")+", "+fmtRange(epStart(ep),epEnd(ep))+", "+STATUS[ep.status].label+"): "+(ep.summary||""));
+    ep.features.forEach(function(f){ var fd=parseD(f.date); if(f.name) lines.push("    • "+f.name+" — "+(fd?fmtMY(fd):"no date set")+" ("+STATUS[f.status].label+")"); });
+  });
+  return lines.join("\n");
+}
+function buildAiPrompt(){
+  return buildPrompt()+"\n\nRespond with ONLY a JSON object — no markdown fences, no commentary:\n{\"summary\": \"<executive summary, 4-5 sentences>\", \"notes\": \"<speaker notes, about 120 words, paragraphs separated by blank lines>\"}";
+}
+function renderPrompt(){ $("llmPrompt").textContent = buildAiPrompt(); }
+function generateCopy(announce){
+  var p = state.product || "Product";
+  var nE = state.epics.length;
+  var nF = state.epics.reduce(function(s,e){ return s+e.features.filter(function(f){return f.name;}).length; },0);
+  var risk = state.epics.filter(function(e){ return e.status==="risk"; });
+  var done = state.epics.filter(function(e){ return e.status==="done"; }).length;
+  var inProg = state.epics.filter(function(e){ return e.status==="progress"; }).length;
+  var s=[];
+  s.push("Across "+rangeLong()+", "+p+" ships "+nE+" epic"+(nE===1?"":"s")+" and "+nF+" feature"+(nF===1?"":"s")+" over "+gridInfo().cols.length+" quarters.");
+  if(state.goal) s.push("The goal: "+state.goal.charAt(0).toLowerCase()+state.goal.slice(1));
+  if(state.metric) s.push("Success is measured on "+state.metric.toLowerCase()+(state.metricTarget ? ", moving "+state.metricTarget : "")+".");
+  if(inProg||done) s.push("Momentum is real: "+done+" epic"+(done===1?" is":"s are")+" done and "+inProg+" in progress as the year opens.");
+  if(risk.length) s.push("One watch-out: "+risk.map(function(e){return "“"+(e.name||"Untitled")+"”";}).join(", ")+" "+(risk.length===1?"is":"are")+" flagged at risk — the ask today is a decision on the blocker, not more status.");
+  state.summary = s.join(" ");
+  var notes=[];
+  notes.push("Cover: Open on the goal, not the feature list. "+(state.goal||"")+" Everything on the next slide exists to serve that outcome.");
+  state.epics.forEach(function(ep){
+    notes.push((ep.name||"Untitled epic")+" ("+fmtRange(epStart(ep),epEnd(ep))+", "+(ep.owner||"owner TBD")+"): "+(ep.summary||"No summary written yet.")+(ep.status==="risk" ? " Flag the blocker explicitly and name the decision you need." : ""));
+  });
+  notes.push("Close: Restate the metric — "+(state.metric||"the headline metric")+(state.metricTarget ? " ("+state.metricTarget+")" : "")+" — and confirm owners before the room leaves.");
+  state.notes = notes.join("\n\n");
+  $("fSummary").value=state.summary; $("fNotes").value=state.notes;
+  renderPrompt(); renderPreview();
+  if(announce!==false) toast("Slide copy generated from your answers — edit it in Step 4");
+}
+$("btnDraft").addEventListener("click", function(){ generateCopy(true); });
+
+/* ---------------- Live LLM connection ---------------- */
+var AI_DEFAULTS={ anthropic:"claude-sonnet-4-5", openai:"gpt-4o-mini" };
+function aiStatus(msg){ var el=$("aiStatus"); if(!el) return; el.hidden=!msg; el.textContent=msg||""; }
+$("fProvider").addEventListener("change", function(e){
+  var m=$("fModel");
+  if(!m.value || m.value===AI_DEFAULTS.anthropic || m.value===AI_DEFAULTS.openai) m.value=AI_DEFAULTS[e.target.value];
+});
+$("btnAi").addEventListener("click", function(){
+  var provider=$("fProvider").value;
+  var key=$("fApiKey").value.trim();
+  var model=$("fModel").value.trim()||AI_DEFAULTS[provider];
+  var providerName = provider==="anthropic" ? "Anthropic" : "OpenAI";
+  if(!key){ aiStatus("Paste your "+providerName+" API key above first — or use “Draft locally (no key)”, which needs no key."); $("fApiKey").focus(); return; }
+  var btn=$("btnAi"); btn.disabled=true; btn.textContent="Asking the model…";
+  aiStatus("Sending your questionnaire answers to "+providerName+" ("+model+")…");
+  var url, headers, req;
+  if(provider==="anthropic"){
+    url="https://api.anthropic.com/v1/messages";
+    headers={"content-type":"application/json","x-api-key":key,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"};
+    req={model:model, max_tokens:1500, messages:[{role:"user", content:buildAiPrompt()}]};
+  } else {
+    url="https://api.openai.com/v1/chat/completions";
+    headers={"content-type":"application/json","authorization":"Bearer "+key};
+    req={model:model, max_tokens:1500, messages:[{role:"user", content:buildAiPrompt()}]};
+  }
+  fetch(url,{method:"POST", headers:headers, body:JSON.stringify(req)}).then(function(res){
+    return res.text().then(function(t){ return {ok:res.ok, status:res.status, body:t}; });
+  }).then(function(r){
+    if(!r.ok){
+      var msg="The provider returned an error ("+r.status+").";
+      if(r.status===401||r.status===403) msg="That API key was rejected ("+r.status+") — check the key and that it belongs to the selected provider.";
+      else { try{ var j=JSON.parse(r.body); if(j.error&&j.error.message) msg=j.error.message; }catch(e){} }
+      throw new Error(msg);
+    }
+    var data=JSON.parse(r.body), text="";
+    if(provider==="anthropic"){ (data.content||[]).forEach(function(b){ if(b.type==="text") text+=b.text; }); }
+    else { text=(data.choices&&data.choices[0]&&data.choices[0].message&&data.choices[0].message.content)||""; }
+    if(!text) throw new Error("The model replied with no text — try again.");
+    var clean=text.replace(/```(?:json)?/gi,"").trim();
+    var parsed=null;
+    try{ parsed=JSON.parse(clean); }catch(e){
+      var a=clean.indexOf("{"), b=clean.lastIndexOf("}");
+      if(a>-1&&b>a){ try{ parsed=JSON.parse(clean.slice(a,b+1)); }catch(e2){} }
+    }
+    if(parsed&&(parsed.summary||parsed.notes)){
+      if(parsed.summary) state.summary=String(parsed.summary);
+      if(parsed.notes) state.notes=String(parsed.notes);
+    } else { state.summary=clean; }
+    $("fSummary").value=state.summary; $("fNotes").value=state.notes;
+    renderPreview();
+    aiStatus("Done — the model's executive summary and speaker notes are in the fields below. Edit them freely before downloading.");
+    toast("AI copy generated from your answers — review it in Step 4");
+  }).catch(function(err){
+    aiStatus("Couldn't generate: "+(err&&err.message ? err.message : "network error — check your connection and try again."));
+  }).finally(function(){ btn.disabled=false; btn.textContent="✦ Generate with AI"; });
+});
+$("btnCopyPrompt").addEventListener("click", function(){
+  var txt=buildAiPrompt();
+  function done(){ toast("LLM prompt copied — paste it into any chat model, then paste the summary back into Step 4"); }
+  if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(done, function(){ fallback(); }); } else fallback();
+  function fallback(){ var ta=document.createElement("textarea"); ta.value=txt; document.body.appendChild(ta); ta.select(); try{ document.execCommand("copy"); done(); }catch(e){ toast("Copy failed — open “See the prompt” below and copy it manually"); } document.body.removeChild(ta); }
+});
+
+/* ---------------- Preview ---------------- */
+function logoImg(cls){
+  if(!state.logoData) return "";
+  var style = state.logoPos==="tl" ? ' style="right:auto;left:6%"' : "";
+  return '<img class="'+cls+'" src="'+state.logoData+'" alt=""'+style+'>';
+}
+function coverSlide(){
+  var meta=[];
+  if(state.presenter) meta.push(esc(state.presenter));
+  if(state.audience) meta.push("For: "+esc(state.audience));
+  if(state.date) meta.push(esc(state.date));
+  else meta.push(esc(rangeLong()));
+  return '<div class="slide cover" style="--slide-primary:'+state.primary+';--slide-accent:'+state.accent+'">'
+    + '<div class="accent-bar"></div>'+logoImg("cover-logo")
+    + '<div class="slide-inner"><div class="kicker">'+esc(state.company||"Product roadmap")+' · '+rangeLabel()+' Roadmap</div>'
+    + '<h3>'+esc(state.product||"Your product name")+'</h3>'
+    + '<p class="tagline">'+esc(state.tagline||"Add a one-line vision in Step 1 — it lands here.")+'</p>'
+    + (state.goal ? '<div class="goal-box"><b>Project goal</b>'+esc(state.goal)+'</div>' : "")
+    + '<div class="cover-meta">'+meta.map(function(m){return "<span>"+m+"</span>";}).join("")+'</div>'
+    + '</div></div>';
+}
+function timelineSlide(){
+  var g=gridInfo(), n=g.cols.length;
+  var head='<div class="tl" style="grid-template-columns:19% repeat('+n+',1fr);grid-template-rows:2.3em repeat('+Math.max(1,state.epics.length)+',minmax(0,1fr))"><div class="qh" style="background:'+state.primary+'">Epic</div>'
+    + g.cols.map(function(c){ return '<div class="qh" style="background:'+state.primary+'"><div>Q'+(Math.floor(c.getMonth()/3)+1)+' '+c.getFullYear()+'<small>'+MONTHS[c.getMonth()]+' – '+MONTHS[c.getMonth()+2]+'</small></div></div>'; }).join("");
+  var emptyCells=""; for(var ec=0;ec<n;ec++) emptyCells+='<div class="cell"></div>';
+  var rows = state.epics.length ? state.epics.map(function(ep,i){
+    var es=epStart(ep), ee=epEnd(ep);
+    var sc=colIndex(es,g), cellStart=g.cols[sc], cellMs=addMonths(cellStart,3)-cellStart;
+    var frac=Math.min(1, Math.max(0,(es-cellStart)/cellMs));
+    var spanCols=Math.min(n-sc, Math.max(0.3,(ee-cellStart)/cellMs));
+    var cells='<div class="lane-label">'+esc(ep.name||("Epic "+(i+1)))+'<small>'+esc(ep.owner||"Owner TBD")+' · '+STATUS[ep.status].label+'</small>'+(ep.summary?'<span class="sum">'+esc(ep.summary)+'</span>':"")+'</div>';
+    for(var q=0;q<n;q++){
+      var inner="";
+      if(q===sc){
+        inner='<div class="bar" style="background:'+STATUS[ep.status].color+';left:calc('+(frac*100)+'% + 3px);width:calc('+((spanCols-frac)*100)+'% - 6px)">'+esc(ep.name||"")+'</div>';
+      }
+      var feats=ep.features.filter(function(f){ var fd=parseD(f.date); return fd && f.name && colIndex(fd,g)===q; });
+      if(feats.length) inner+='<div class="feat"'+(q===sc?' style="bottom:auto;top:4%"':'')+'>'+esc(feats.map(function(f){return f.name;}).join(" · "))+'</div>';
+      cells+='<div class="cell">'+inner+'</div>';
+    }
+    return cells;
+  }).join("") : '<div class="lane-label">No epics yet</div>'+emptyCells;
+  var legend=Object.keys(STATUS).map(function(k){ return '<span><i style="background:'+STATUS[k].color+'"></i>'+STATUS[k].label+'</span>'; }).join("");
+  return '<div class="slide road"><div class="slide-inner"><h3>'+esc(state.product||"Product")+' — '+rangeLabel()+' roadmap</h3>'
+    + '<p class="sub">'+state.epics.length+' epics · '+state.epics.reduce(function(s,e){return s+e.features.filter(function(f){return f.name;}).length;},0)+' features · '+rangeLong()+' · Bars show the epic span, ◆ marks a feature landing</p>'
+    + head+rows+'</div>'
+    + '<div class="legend">'+legend+'</div>'
+    + '<div class="slide-foot"><span>'+esc(state.footer||"")+'</span><span>'+esc(state.company||"")+'</span></div></div></div>';
+}
+function nnlSlide(){
+  var buckets=[[],[],[]];
+  var psT=projStart().getTime(), peT=projEnd().getTime(), spanT=Math.max(1,peT-psT);
+  state.epics.forEach(function(ep,i){
+    var frac=(epStart(ep).getTime()-psT)/spanT;
+    var b = frac<1/3 ? 0 : (frac<2/3 ? 1 : 2);
+    if(ep.status==="done"||ep.status==="progress") b=0;
+    buckets[b].push({ep:ep,i:i});
+  });
+  var t1=new Date(psT+spanT/3), t2=new Date(psT+2*spanT/3);
+  var titles=["NOW — "+fmtMY(projStart())+" – "+fmtMY(t1),"NEXT — "+fmtMY(t1)+" – "+fmtMY(t2),"LATER — "+fmtMY(t2)+" – "+fmtMY(projEnd())];
+  var bgs=["#e6f2ef","#fdf3e0","#eef1ee"];
+  var cols=titles.map(function(t,bi){
+    var items=buckets[bi].length ? buckets[bi].map(function(o){
+      return '<div class="item"><b>'+esc(o.ep.name||"Untitled epic")+'</b><span>'+esc(o.ep.summary||"")+' ('+esc(o.ep.owner||"Owner TBD")+')</span></div>';
+    }).join("") : '<div class="item"><b>—</b><span>Nothing scheduled in this horizon yet.</span></div>';
+    return '<div class="nnl-col" style="background:'+bgs[bi]+'"><h4>'+t+'</h4>'+items+'</div>';
+  }).join("");
+  return '<div class="slide road"><div class="slide-inner"><h3>'+esc(state.product||"Product")+' — Now / Next / Later</h3>'
+    + '<p class="sub">Same plan, grouped by horizon instead of exact dates — the version executives usually prefer.</p>'
+    + '<div class="nnl">'+cols+'</div>'
+    + '<div class="slide-foot"><span>'+esc(state.footer||"")+'</span><span>'+esc(state.company||"")+'</span></div></div></div>';
+}
+function summarySlide(){
+  var bullets = state.summary ? state.summary.split(/(?<=[.!?])\s+/).filter(Boolean) : ["Generate the executive summary in Step 4 and it appears here, one sentence per bullet."];
+  var risks = state.epics.filter(function(e){ return e.status==="risk"; });
+  var riskHtml = risks.length ? risks.map(function(e){ return "<li><b>"+esc(e.name||"Untitled")+"</b> — "+esc(e.summary||"Blocker not described yet.")+"</li>"; }).join("") : "<li>No epics are flagged at risk.</li>";
+  return '<div class="slide road"><div class="slide-inner"><h3>Summary &amp; asks</h3>'
+    + '<p class="sub">What this plan delivers, how we will know, and what needs a decision.</p>'
+    + '<div class="sum-grid"><div><h4>Executive summary</h4><ul>'+bullets.map(function(b){return "<li>"+esc(b)+"</li>";}).join("")+'</ul>'
+    + '<h4 style="margin-top:1em">Risks &amp; decisions needed</h4><ul>'+riskHtml+'</ul></div>'
+    + '<div><div class="metric-box"><b>'+esc(state.metricTarget||"—")+'</b><span>'+esc(state.metric||"Headline metric")+' target</span></div>'
+    + '<div class="metric-box"><b>'+state.epics.length+' epics</b><span>'+state.epics.reduce(function(s,e){return s+e.features.filter(function(f){return f.name;}).length;},0)+' features across '+rangeLabel()+'</span></div>'
+    + '<div class="metric-box"><b>'+state.epics.filter(function(e){return e.status==="progress";}).length+' in flight</b><span>'+state.epics.filter(function(e){return e.status==="done";}).length+' done · '+risks.length+' at risk</span></div></div></div>'
+    + '<div class="slide-foot"><span>'+esc(state.footer||"")+'</span><span>'+esc(state.company||"")+'</span></div></div></div>';
+}
+function renderPreview(){
+  var slides=[];
+  if(state.template==="timeline"){ slides=[["Slide 1 · Cover",coverSlide()],["Slide 2 · Timeline roadmap",timelineSlide()]]; }
+  else if(state.template==="nnl"){ slides=[["Slide 1 · Cover",coverSlide()],["Slide 2 · Now / Next / Later",nnlSlide()]]; }
+  else { slides=[["Slide 1 · Cover",coverSlide()],["Slide 2 · Timeline roadmap",timelineSlide()],["Slide 3 · Summary & asks",summarySlide()]]; }
+  $("slideCount").textContent = slides.length+" slides · 16:9";
+  $("preview").innerHTML = slides.map(function(s){ return '<div class="slide-label">'+s[0]+'</div>'+s[1]; }).join("")
+    + (state.notes ? '<div class="slide-label">Speaker notes (slide 1, in the .pptx)</div><div class="notes-box">'+esc(state.notes)+'</div>' : "");
+}
+function renderAll(){ renderEpics(); renderPreview(); renderChecks(); renderPrompt(); renderGantt(); }
+
+/* ---------------- Toolbar actions ---------------- */
+$("btnExample").addEventListener("click", loadExample);
+$("btnClear").addEventListener("click", function(){
+  state.product=""; state.tagline=""; state.audience=""; state.presenter=""; state.goal=""; state.metric=""; state.metricTarget="";
+  state.company=""; state.footer=""; state.summary=""; state.notes=""; state.epics=[]; state.tasks=[]; state.logoData=null;
+  var ny=new Date().getFullYear()+1; state.startDate=ny+"-01-01"; state.endDate=ny+"-12-31";
+  $("fLogo").value=""; renderLogoPreview(); syncForm(); renderAll(); toast("Cleared — start from the questionnaire in Step 1");
+});
+$("btnExportJson").addEventListener("click", function(){
+  var data=JSON.stringify({product:state.product,tagline:state.tagline,audience:state.audience,presenter:state.presenter,startDate:state.startDate,endDate:state.endDate,date:state.date,goal:state.goal,metric:state.metric,metricTarget:state.metricTarget,company:state.company,footer:state.footer,primary:state.primary,accent:state.accent,template:state.template,summary:state.summary,notes:state.notes,epics:state.epics,tasks:state.tasks}, null, 2);
+  var a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([data],{type:"application/json"}));
+  a.download=(state.product||"project").toLowerCase().replace(/[^a-z0-9]+/g,"-")+"-project.json"; a.click(); setTimeout(function(){ URL.revokeObjectURL(a.href); }, 2000);
+  toast("Project saved as JSON — epics, features, and Gantt tasks included");
+});
+$("fImport").addEventListener("change", function(e){
+  var f=e.target.files && e.target.files[0]; if(!f) return;
+  var r=new FileReader();
+  r.onload=function(){
+    try{
+      var d=JSON.parse(r.result);
+      ["product","tagline","audience","presenter","startDate","endDate","date","goal","metric","metricTarget","company","footer","primary","accent","template","summary","notes"].forEach(function(k){ if(d[k]!=null) state[k]=d[k]; });
+      if(!d.startDate && d.year){ state.startDate=d.year+"-01-01"; state.endDate=d.year+"-12-31"; }
+      if(Array.isArray(d.epics)){ state.epics=d.epics; state.epics.forEach(function(ep){ ep.features=(ep.features||[]);
+        if(typeof ep.start==="number"){ var y=d.year||new Date().getFullYear(); var eNum=ep.end; ep.end=toISO(new Date(y, eNum*3+3, 0)); ep.start=toISO(new Date(y, ep.start*3, 1)); ep.features.forEach(function(ft){ if(typeof ft.q==="number"){ ft.date=toISO(new Date(y, ft.q*3, 15)); delete ft.q; } }); }
+      }); uid=10000; state.epics.forEach(function(ep){ ep.id=uid++; ep.features.forEach(function(ft){ ft.id=uid++; }); }); }
+      if(Array.isArray(d.tasks)){ var tmap={}; state.tasks=d.tasks; state.tasks.forEach(function(t){ var nid=uid++; tmap[t.id]=nid; t.id=nid; });
+        state.tasks.forEach(function(t){ t.dep = tmap[t.dep]!=null ? tmap[t.dep] : ""; if(typeof t.progress!=="number") t.progress=parseInt(t.progress,10)||0; if(t.type!=="milestone") t.type="task"; t.name=t.name||""; t.owner=t.owner||""; t.start=t.start||""; t.end=t.end||""; }); }
+      syncForm(); renderAll(); toast("Project loaded — roadmap and Gantt are both up to date");
+    }catch(err){ toast("That file could not be read as a roadmap JSON"); }
+  };
+  r.readAsText(f); e.target.value="";
+});
+
+/* ---------------- CSV import ---------------- */
+function parseCSV(text){
+  var rows=[], row=[], cur="", inQ=false, i, c;
+  text=String(text||"").replace(/^\uFEFF/, "");
+  for(i=0;i<text.length;i++){ c=text[i];
+    if(inQ){ if(c==='"'){ if(text[i+1]==='"'){ cur+='"'; i++; } else inQ=false; } else cur+=c; }
+    else if(c==='"') inQ=true;
+    else if(c===","){ row.push(cur); cur=""; }
+    else if(c==="\n"){ row.push(cur); rows.push(row); row=[]; cur=""; }
+    else if(c!=="\r") cur+=c;
+  }
+  if(cur!==""||row.length){ row.push(cur); rows.push(row); }
+  return rows.filter(function(r){ return r.some(function(x){ return String(x).trim()!==""; }); });
+}
+var MONTH_LOOKUP={jan:0,feb:1,mar:2,apr:3,may:4,jun:5,jul:6,aug:7,sep:8,oct:9,nov:10,dec:11};
+function parseCsvDate(v, isEnd){
+  v=String(v||"").trim(); if(!v) return "";
+  var m=v.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/); if(m) return toISO(new Date(+m[1],+m[2]-1,+m[3]));
+  m=v.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/); if(m) return toISO(new Date(+m[3],+m[1]-1,+m[2]));
+  m=v.match(/^[Qq]([1-4])\s*[-– ]?\s*(\d{4})$/); if(m){ var qm=(+m[1]-1)*3; return isEnd ? toISO(new Date(+m[2],qm+3,0)) : toISO(new Date(+m[2],qm,1)); }
+  m=v.match(/^([A-Za-z]{3,9})\.?\s+(\d{4})$/);
+  if(m && MONTH_LOOKUP[m[1].slice(0,3).toLowerCase()]!=null){ var mi=MONTH_LOOKUP[m[1].slice(0,3).toLowerCase()]; return isEnd ? toISO(new Date(+m[2],mi+1,0)) : toISO(new Date(+m[2],mi,1)); }
+  return "";
+}
+function normStatus(v){
+  v=String(v||"").toLowerCase();
+  if(/done|complete|shipped|live|released/.test(v)) return "done";
+  if(/progress|doing|active|underway|started/.test(v)) return "progress";
+  if(/risk|block|delay/.test(v)) return "risk";
+  return "planned";
+}
+function importCSV(text){
+  var rows=parseCSV(text);
+  if(rows.length<2){ toast("That CSV looks empty — it needs a header row plus one row per epic or feature"); return; }
+  var head=rows[0].map(function(h){ return String(h).toLowerCase().trim(); });
+  function col(names){ for(var i=0;i<head.length;i++){ if(names.indexOf(head[i])>-1) return i; } return -1; }
+  var iType=col(["type","kind"]), iName=col(["name","title","epic / feature","item"]),
+      iOwner=col(["owner","team","owner / team"]), iStart=col(["start","start date","starts","from"]),
+      iEnd=col(["end","end date","ends","to"]), iStatus=col(["status","state"]),
+      iSummary=col(["summary","description","notes","details"]),
+      iEpic=col(["epic","parent","parent epic","epic name"]), iDate=col(["date","feature date","milestone","milestone date"]);
+  if(iName<0 && iEpic>=0) iName=iEpic;
+  if(iName<0){ toast("Couldn't find a name column in that CSV — compare the header row with the template"); return; }
+  function get(r,i){ return i>=0 && r[i]!=null ? String(r[i]).trim() : ""; }
+  var epics=[], byName={}, last=null, nF=0;
+  rows.slice(1).forEach(function(r){
+    var name=get(r,iName); if(!name) return;
+    var type=get(r,iType).toLowerCase();
+    var parentName=get(r,iEpic);
+    var isFeature = type==="feature" || type==="f" ||
+      (type==="" && iEpic>=0 && iEpic!==iName && parentName && parentName.toLowerCase()!==name.toLowerCase());
+    if(isFeature){
+      var parent=byName[(parentName||"").toLowerCase()] || last;
+      if(!parent){ parent=newEpic(parentName||"Imported work","","","","planned",""); epics.push(parent); byName[parent.name.toLowerCase()]=parent; last=parent; }
+      var fd=parseCsvDate(get(r,iDate)||get(r,iStart), false);
+      parent.features.push(newFeature(name, fd||parent.start, normStatus(get(r,iStatus))));
+      nF++;
+    } else {
+      var s=parseCsvDate(get(r,iStart), false), e=parseCsvDate(get(r,iEnd), true);
+      if(s && !e){ var sd=parseD(s); e=toISO(new Date(sd.getFullYear(), sd.getMonth()+6, 0)); }
+      if(!s && e){ var ed=parseD(e); s=toISO(new Date(ed.getFullYear(), ed.getMonth()-5, 1)); }
+      var ep=newEpic(name, get(r,iOwner), s, e, normStatus(get(r,iStatus)), get(r,iSummary));
+      epics.push(ep); byName[name.toLowerCase()]=ep; last=ep;
+    }
+  });
+  if(!epics.length){ toast("No epics found in that CSV — each epic row needs at least a name"); return; }
+  state.epics=epics;
+  var min=null, max=null;
+  epics.forEach(function(ep){
+    var ds=[ep.start, ep.end]; ep.features.forEach(function(f){ ds.push(f.date); });
+    ds.forEach(function(x){ var d=parseD(x); if(d){ if(!min||d<min) min=d; if(!max||d>max) max=d; } });
+  });
+  if(min && min<projStart()) state.startDate=toISO(min);
+  if(max && max>projEnd()) state.endDate=toISO(max);
+  syncForm(); renderAll();
+  toast("Imported "+epics.length+" epics and "+nF+" features from the CSV — check the dates in Step 3");
+}
+$("fCsv").addEventListener("change", function(e){
+  var f=e.target.files && e.target.files[0]; if(!f) return;
+  var r=new FileReader();
+  r.onload=function(){ try{ importCSV(String(r.result)); }catch(err){ toast("That file could not be read as a CSV"); } };
+  r.readAsText(f); e.target.value="";
+});
+$("btnCsvTemplate").addEventListener("click", function(){
+  var csv="type,name,owner,start,end,status,summary,epic,date\n"
+    +"epic,Guided Onboarding,Design + Web,2027-01-01,2027-06-30,in progress,Checklist-based setup with templates per industry,,\n"
+    +"feature,Onboarding checklist,,,,done,,Guided Onboarding,2027-02-15\n"
+    +"feature,Industry templates,,,,planned,,Guided Onboarding,2027-05-20\n"
+    +"epic,Mobile App,Mobile,2027-07-01,2028-06-30,planned,Native iOS and Android apps for approvals on the go,,\n"
+    +"feature,iOS beta,,,,planned,,Mobile App,2028-03-01\n"
+    +"feature,Android launch,,,,planned,,Mobile App,2028-06-15\n";
+  var a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"}));
+  a.download="roadmap-epics-features-template.csv"; a.click(); setTimeout(function(){ URL.revokeObjectURL(a.href); }, 2000);
+  toast("Template downloaded — fill it in, then load it with Import (.csv)");
+});
+
+/* ---------------- PPTX generation ---------------- */
+function hex(c){ return String(c||"#000000").replace("#","").toUpperCase(); }
+function addFooter(slide, pptx){
+  slide.addText(state.footer||"", {x:0.55, y:7.08, w:6, h:0.3, fontSize:9, color:"8A968F", fontFace:"Arial"});
+  slide.addText(state.company||"", {x:11.2, y:7.08, w:1.6, h:0.3, fontSize:9, color:"8A968F", fontFace:"Arial", align:"right"});
+}
+function addLogo(slide, y){
+  if(!state.logoData) return;
+  try{ slide.addImage({data: state.logoData, x: state.logoPos==="tl" ? 0.55 : 11.15, y: y||0.35, w:1.6, h:0.55, sizing:{type:"contain", w:1.6, h:0.55}}); }catch(e){}
+}
+function buildCover(pptx){
+  var s=pptx.addSlide();
+  s.background={color: hex(state.primary)};
+  s.addShape(pptx.shapes.RECTANGLE, {x:0, y:0, w:0.14, h:7.5, fill:{color:hex(state.accent)}, line:{type:"none"}});
+  addLogo(s, 0.45);
+  s.addText((state.company||"PRODUCT ROADMAP")+"  ·  "+rangeLabel().toUpperCase()+" ROADMAP", {x:0.7, y:0.75, w:9, h:0.4, fontSize:13, color:"FFFFFF", fontFace:"Arial", charSpacing:4, transparency:25});
+  s.addText(state.product||"Product Roadmap", {x:0.7, y:1.25, w:10.5, h:1.9, fontSize:48, bold:true, color:"FFFFFF", fontFace:"Arial", lineSpacingMultiple:1.02});
+  if(state.tagline) s.addText(state.tagline, {x:0.7, y:3.15, w:10, h:0.7, fontSize:20, color:"FFFFFF", fontFace:"Arial", transparency:12});
+  if(state.goal){
+    s.addShape(pptx.shapes.ROUNDED_RECTANGLE, {x:0.7, y:4.15, w:11.2, h:1.25, fill:{color:"FFFFFF", transparency:88}, line:{color:"FFFFFF", transparency:70, width:1}, rectRadius:0.08});
+    s.addText("PROJECT GOAL", {x:0.95, y:4.32, w:10.5, h:0.3, fontSize:10, bold:true, color:"FFFFFF", fontFace:"Arial", charSpacing:3, transparency:30});
+    s.addText(state.goal, {x:0.95, y:4.65, w:10.7, h:0.65, fontSize:14, color:"FFFFFF", fontFace:"Arial"});
+  }
+  var meta=[state.presenter, state.audience?("For: "+state.audience):"", state.date||rangeLong()].filter(Boolean).join("      ");
+  s.addText(meta, {x:0.7, y:6.6, w:11, h:0.4, fontSize:13, color:"FFFFFF", fontFace:"Arial", transparency:15});
+  if(state.notes) s.addNotes(state.notes);
+  return s;
+}
+function buildTimeline(pptx){
+  var s=pptx.addSlide(); s.background={color:"FFFFFF"};
+  addLogo(s, 0.3);
+  s.addText((state.product||"Product")+" — "+rangeLabel()+" roadmap", {x:0.55, y:0.32, w:10.2, h:0.55, fontSize:26, bold:true, color:"14201C", fontFace:"Arial"});
+  s.addText(state.epics.length+" epics · "+rangeLong()+" · Bars show the epic span, ◆ marks a feature landing in that quarter", {x:0.55, y:0.9, w:11, h:0.35, fontSize:12, color:"5C6B64", fontFace:"Arial"});
+  var g=gridInfo(), nQ=g.cols.length, gMs=g.end-g.start;
+  var x0=0.55, labelW=2.35, gridW=12.23-labelW, colW=gridW/nQ, y0=1.45, rowH=Math.min(0.78, 4.9/Math.max(1,state.epics.length));
+  s.addShape(pptx.shapes.RECTANGLE, {x:x0, y:y0, w:labelW, h:0.5, fill:{color:hex(state.primary)}, line:{type:"none"}});
+  s.addText("Epic", {x:x0+0.12, y:y0+0.08, w:labelW-0.2, h:0.35, fontSize:12, bold:true, color:"FFFFFF", fontFace:"Arial"});
+  for(var q=0;q<nQ;q++){
+    var qc=g.cols[q];
+    s.addShape(pptx.shapes.RECTANGLE, {x:x0+labelW+q*colW, y:y0, w:colW, h:0.5, fill:{color:hex(state.primary)}, line:{color:"FFFFFF", width:1}});
+    s.addText("Q"+(Math.floor(qc.getMonth()/3)+1)+" "+qc.getFullYear(), {x:x0+labelW+q*colW, y:y0+0.09, w:colW, h:0.35, fontSize:nQ>5?10.5:12, bold:true, color:"FFFFFF", fontFace:"Arial", align:"center"});
+  }
+  state.epics.forEach(function(ep,i){
+    var y=y0+0.5+i*rowH;
+    s.addShape(pptx.shapes.RECTANGLE, {x:x0, y:y, w:labelW, h:rowH, fill:{color:"F7F8F7"}, line:{color:"E6EAE6", width:0.75}});
+    s.addText(ep.name||("Epic "+(i+1)), {x:x0+0.12, y:y+0.06, w:labelW-0.2, h:0.3, fontSize:11.5, bold:true, color:"14201C", fontFace:"Arial"});
+    s.addText((ep.owner||"Owner TBD")+" · "+STATUS[ep.status].label, {x:x0+0.12, y:y+0.32, w:labelW-0.2, h:0.24, fontSize:9.5, color:"5C6B64", fontFace:"Arial"});
+    if(ep.summary) s.addText(ep.summary, {x:x0+0.12, y:y+0.54, w:labelW-0.2, h:Math.max(0.2,rowH-0.58), fontSize:8.5, color:"44524B", fontFace:"Arial"});
+    for(var q2=0;q2<nQ;q2++) s.addShape(pptx.shapes.RECTANGLE, {x:x0+labelW+q2*colW, y:y, w:colW, h:rowH, fill:{color:"FFFFFF"}, line:{color:"E6EAE6", width:0.75}});
+    var es=epStart(ep), ee=epEnd(ep);
+    var bx=x0+labelW+((es-g.start)/gMs)*gridW+0.04, bw=Math.max(0.35, ((ee-es+86400000)/gMs)*gridW-0.08);
+    if(bx<x0+labelW+0.02) bx=x0+labelW+0.02;
+    if(bx+bw>x0+labelW+gridW) bw=x0+labelW+gridW-bx;
+    s.addShape(pptx.shapes.ROUNDED_RECTANGLE, {x:bx, y:y+0.1, w:bw, h:rowH*0.52, fill:{color:hex(STATUS[ep.status].color)}, line:{type:"none"}, rectRadius:0.05});
+    s.addText(ep.name||"", {x:bx+0.1, y:y+0.13, w:bw-0.18, h:rowH*0.45, fontSize:10, bold:true, color:"FFFFFF", fontFace:"Arial", valign:"middle"});
+    ep.features.forEach(function(f){
+      var fd=parseD(f.date); if(!f.name||!fd) return;
+      s.addText("◆ "+f.name, {x:x0+labelW+((fd-g.start)/gMs)*gridW+0.05, y:y+rowH*0.66, w:colW-0.1, h:0.24, fontSize:8.5, bold:true, color:"33413B", fontFace:"Arial"});
+    });
+  });
+  var ly=y0+0.5+state.epics.length*rowH+0.25, lx=x0;
+  Object.keys(STATUS).forEach(function(k){
+    s.addShape(pptx.shapes.RECTANGLE, {x:lx, y:ly+0.03, w:0.16, h:0.16, fill:{color:hex(STATUS[k].color)}, line:{type:"none"}});
+    s.addText(STATUS[k].label, {x:lx+0.22, y:ly-0.03, w:1.4, h:0.3, fontSize:10.5, bold:true, color:"44524B", fontFace:"Arial"});
+    lx+=1.75;
+  });
+  addFooter(s, pptx);
+  return s;
+}
+function buildNNL(pptx){
+  var s=pptx.addSlide(); s.background={color:"FFFFFF"};
+  addLogo(s, 0.3);
+  s.addText((state.product||"Product")+" — Now / Next / Later", {x:0.55, y:0.32, w:10.2, h:0.55, fontSize:26, bold:true, color:"14201C", fontFace:"Arial"});
+  s.addText("The same plan, grouped by horizon instead of exact dates.", {x:0.55, y:0.9, w:11, h:0.35, fontSize:12, color:"5C6B64", fontFace:"Arial"});
+  var buckets=[[],[],[]];
+  var psT=projStart().getTime(), peT=projEnd().getTime(), spanT=Math.max(1,peT-psT);
+  state.epics.forEach(function(ep){ var frac=(epStart(ep).getTime()-psT)/spanT; var b=frac<1/3?0:(frac<2/3?1:2); if(ep.status==="done"||ep.status==="progress") b=0; buckets[b].push(ep); });
+  var t1=new Date(psT+spanT/3), t2=new Date(psT+2*spanT/3);
+  var titles=["NOW — "+fmtMY(projStart())+" – "+fmtMY(t1),"NEXT — "+fmtMY(t1)+" – "+fmtMY(t2),"LATER — "+fmtMY(t2)+" – "+fmtMY(projEnd())], fills=["E6F2EF","FDF3E0","EEF1EE"];
+  titles.forEach(function(t,bi){
+    var x=0.55+bi*4.12;
+    s.addShape(pptx.shapes.ROUNDED_RECTANGLE, {x:x, y:1.45, w:3.9, h:5.2, fill:{color:fills[bi]}, line:{type:"none"}, rectRadius:0.08});
+    s.addText(t, {x:x+0.25, y:1.65, w:3.4, h:0.4, fontSize:15, bold:true, color:"14201C", fontFace:"Arial"});
+    var y=2.2;
+    if(!buckets[bi].length){ s.addText("Nothing scheduled in this horizon yet.", {x:x+0.25, y:y, w:3.4, h:0.5, fontSize:11, color:"5C6B64", fontFace:"Arial"}); }
+    buckets[bi].forEach(function(ep){
+      s.addShape(pptx.shapes.ROUNDED_RECTANGLE, {x:x+0.22, y:y, w:3.46, h:0.95, fill:{color:"FFFFFF", transparency:25}, line:{color:"D9DED9", width:0.75}, rectRadius:0.06});
+      s.addText(ep.name||"Untitled epic", {x:x+0.38, y:y+0.1, w:3.15, h:0.32, fontSize:12, bold:true, color:"14201C", fontFace:"Arial"});
+      s.addText((ep.summary||"")+" ("+(ep.owner||"Owner TBD")+")", {x:x+0.38, y:y+0.42, w:3.15, h:0.45, fontSize:9.5, color:"5C6B64", fontFace:"Arial"});
+      y+=1.1;
+    });
+  });
+  addFooter(s, pptx);
+  return s;
+}
+function buildSummary(pptx){
+  var s=pptx.addSlide(); s.background={color:"FFFFFF"};
+  addLogo(s, 0.3);
+  s.addText("Summary & asks", {x:0.55, y:0.32, w:10, h:0.55, fontSize:26, bold:true, color:"14201C", fontFace:"Arial"});
+  s.addText("What this plan delivers, how we will know, and what needs a decision.", {x:0.55, y:0.9, w:11, h:0.35, fontSize:12, color:"5C6B64", fontFace:"Arial"});
+  var bullets=(state.summary||"Generate the executive summary in Step 4.").split(/(?<=[.!?])\s+/).filter(Boolean).map(function(b){ return {text:b, options:{bullet:true, breakLine:true, fontSize:14, color:"24312B", fontFace:"Arial", lineSpacingMultiple:1.25, paraSpaceAfter:8}}; });
+  s.addText(bullets, {x:0.55, y:1.5, w:7.4, h:2.6, valign:"top"});
+  s.addText("Risks & decisions needed", {x:0.55, y:4.35, w:7.4, h:0.4, fontSize:15, bold:true, color:"14201C", fontFace:"Arial"});
+  var risks=state.epics.filter(function(e){ return e.status==="risk"; });
+  var riskText = risks.length ? risks.map(function(e){ return {text:(e.name||"Untitled")+": "+(e.summary||"Blocker not described yet."), options:{bullet:true, breakLine:true, fontSize:12.5, color:"7A2E0E", fontFace:"Arial", paraSpaceAfter:6}}; }) : [{text:"No epics are flagged at risk.", options:{fontSize:12.5, color:"5C6B64", fontFace:"Arial"}}];
+  s.addText(riskText, {x:0.55, y:4.8, w:7.4, h:1.6, valign:"top"});
+  var boxes=[
+    {v: state.metricTarget||"—", l:(state.metric||"Headline metric")+" target"},
+    {v: state.epics.length+" epics", l: state.epics.reduce(function(a,e){return a+e.features.filter(function(f){return f.name;}).length;},0)+" features across "+rangeLabel()},
+    {v: state.epics.filter(function(e){return e.status==="progress";}).length+" in flight", l: state.epics.filter(function(e){return e.status==="done";}).length+" done · "+risks.length+" at risk"}
+  ];
+  boxes.forEach(function(b,i){
+    var y=1.5+i*1.55;
+    s.addShape(pptx.shapes.ROUNDED_RECTANGLE, {x:8.35, y:y, w:4.35, h:1.35, fill:{color:"F2F5F3"}, line:{color:"DFE5DF", width:1}, rectRadius:0.07});
+    s.addText(b.v, {x:8.65, y:y+0.18, w:3.8, h:0.55, fontSize:24, bold:true, color:"14201C", fontFace:"Arial"});
+    s.addText(b.l, {x:8.65, y:y+0.78, w:3.8, h:0.35, fontSize:11, bold:true, color:"5C6B64", fontFace:"Arial"});
+  });
+  addFooter(s, pptx);
+  return s;
+}
+$("btnDownload").addEventListener("click", function(){
+  if(typeof PptxGenJS==="undefined"){ toast("The PowerPoint library hasn't loaded yet — check your connection and try again in a few seconds"); return; }
+  var bad=computeChecks().filter(function(c){ return c.t==="bad"; });
+  if(bad.length && !state.epics.length && !state.product){ toast("Add a product name and at least one epic first — or tap “Load example”"); return; }
+  var btn=$("btnDownload"); btn.disabled=true; btn.textContent="Building deck…";
+  try{
+    var pptx=new PptxGenJS();
+    pptx.defineLayout({name:"WIDE", width:13.33, height:7.5}); pptx.layout="WIDE";
+    pptx.company=state.company||""; pptx.title=(state.product||"Product")+" — "+rangeLabel()+" Roadmap"; pptx.author=state.presenter||"";
+    buildCover(pptx);
+    if(state.template==="nnl") buildNNL(pptx);
+    else { buildTimeline(pptx); if(state.template==="executive") buildSummary(pptx); }
+    var fname=(state.product||"product-roadmap").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")+"-"+rangeLabel().replace(/[^0-9]+/g,"-").replace(/^-|-$/g,"")+"-roadmap.pptx";
+    pptx.writeFile({fileName: fname}).then(function(){ toast("Downloaded "+fname+" — open it in PowerPoint, Keynote, or Google Slides"); })
+      .catch(function(){ toast("The download was blocked — try again"); })
+      .finally(function(){ btn.disabled=false; btn.textContent="⬇ Download .pptx"; });
+  }catch(err){
+    btn.disabled=false; btn.textContent="⬇ Download .pptx";
+    toast("Something went wrong building the file — your entries are still here, try again");
+  }
+});
+
+/* ---------------- Suite navigation ---------------- */
+var VIEW_HINTS={
+  roadmap:"Answer the questionnaire, add epics & features, pick a template — then download a real PowerPoint file.",
+  gantt:"Build the project plan on the same project dates and brand kit: tasks, dependencies, milestones, and the critical path.",
+  about:"How the modules fit together, what is built, and the recommended order for what comes next."
+};
+function showView(name){
+  ["roadmap","gantt","about"].forEach(function(v){ $("view-"+v).hidden = v!==name; });
+  document.querySelectorAll(".nav-item").forEach(function(b){ b.setAttribute("aria-current", b.getAttribute("data-view")===name ? "true" : "false"); });
+  $("barHint").textContent = VIEW_HINTS[name];
+  var isRoad = name==="roadmap";
+  $("tmplSeg").style.display = isRoad ? "" : "none";
+  $("btnExample").style.display = isRoad ? "" : "none";
+  $("btnDownload").style.display = isRoad ? "" : "none";
+  if(name==="gantt") renderGantt();
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+document.querySelectorAll(".nav-item").forEach(function(b){
+  b.addEventListener("click", function(){ showView(b.getAttribute("data-view")); });
+});
+
+/* ---------------- Gantt: seed from epics ---------------- */
+function seedTasks(announce){
+  var tasks=[];
+  state.epics.forEach(function(ep){
+    var t=newTask(ep.name, ep.owner, ep.start, ep.end, "task");
+    t.progress = ep.status==="done" ? 100 : (ep.status==="progress" ? 50 : 0);
+    tasks.push(t);
+    ep.features.forEach(function(f){
+      if(f.name && f.date){ tasks.push(newTask(f.name, ep.owner, f.date, f.date, "milestone")); }
+    });
+  });
+  state.tasks=tasks;
+  renderGantt();
+  if(announce!==false) toast(tasks.length ? "Seeded "+tasks.length+" tasks & milestones from your epics — link dependencies in the list" : "No epics to seed from yet — add epics in the Roadmap module first");
+}
+$("btnSeed").addEventListener("click", function(){ seedTasks(true); });
+
+/* ---------------- Gantt: task editor ---------------- */
+function depOptions(t){
+  var out='<option value="">No dependency</option>';
+  state.tasks.forEach(function(o){ if(String(o.id)!==String(t.id)) out+='<option value="'+o.id+'"'+(String(t.dep)===String(o.id)?" selected":"")+'>'+esc(o.name||"Untitled task")+'</option>'; });
+  return out;
+}
+function typeOptions(t){
+  return '<option value="task"'+(t.type==="task"?" selected":"")+'>Task</option><option value="milestone"'+(t.type==="milestone"?" selected":"")+'>Milestone</option>';
+}
+function renderTasks(){
+  var wrap=$("taskList"); if(!wrap) return;
+  if(!state.tasks.length){ wrap.innerHTML='<div class="empty">No tasks yet.<br>Seed them from your epics, import a CSV, or add the first task below.</div>'; return; }
+  wrap.innerHTML = state.tasks.map(function(t, i){
+    return '<div class="epic" data-task="'+t.id+'">'
+      + '<div class="epic-top"><span class="epic-dot" style="background:'+(t.type==="milestone" ? "var(--accent)" : "var(--teal)")+'"></span><strong>'+esc(t.name||("Task "+(i+1)))+'</strong>'
+      + '<button type="button" class="icon-btn" data-tact="delTask" title="Remove task" aria-label="Remove task">×</button></div>'
+      + '<div class="field"><label>Task name</label><input type="text" data-tf="name" value="'+esc(t.name)+'" placeholder="e.g. Build data migration"></div>'
+      + '<div class="grid2"><div class="field"><label>Owner / team</label><input type="text" data-tf="owner" value="'+esc(t.owner)+'" placeholder="e.g. Platform team"></div>'
+      + '<div class="field"><label>Type</label><select data-tf="type">'+typeOptions(t)+'</select></div></div>'
+      + '<div class="grid3"><div class="field"><label>Start</label><input type="date" data-tf="start" value="'+esc(t.start)+'"></div>'
+      + '<div class="field"><label>End</label><input type="date" data-tf="end" value="'+esc(t.end)+'"></div>'
+      + '<div class="field"><label>% complete</label><input type="number" data-tf="progress" min="0" max="100" step="5" value="'+(t.progress||0)+'"></div></div>'
+      + '<div class="field"><label>Depends on — starts after this finishes</label><select data-tf="dep">'+depOptions(t)+'</select></div>'
+      + '</div>';
+  }).join("");
+}
+$("taskList").addEventListener("input", function(e){
+  var el=e.target.closest(".epic"); if(!el) return;
+  var t=state.tasks.find(function(x){ return String(x.id)===el.getAttribute("data-task"); }); if(!t) return;
+  var f=e.target.getAttribute("data-tf"); if(!f) return;
+  t[f] = f==="progress" ? Math.max(0, Math.min(100, parseInt(e.target.value,10)||0)) : e.target.value;
+  renderGanttChart(); renderGanttChecks();
+});
+$("taskList").addEventListener("change", function(e){
+  var el=e.target.closest(".epic"); if(!el) return;
+  var t=state.tasks.find(function(x){ return String(x.id)===el.getAttribute("data-task"); }); if(!t) return;
+  if(t.type==="milestone") t.end=t.start;
+  renderTasks(); renderGanttChart(); renderGanttChecks();
+});
+$("taskList").addEventListener("click", function(e){
+  var btn=e.target.closest("[data-tact]"); if(!btn) return;
+  var el=e.target.closest(".epic"); var id=el.getAttribute("data-task");
+  state.tasks=state.tasks.filter(function(x){ return String(x.id)!==String(id); });
+  state.tasks.forEach(function(x){ if(String(x.dep)===String(id)) x.dep=""; });
+  renderGantt();
+});
+$("btnAddTask").addEventListener("click", function(){
+  var s=projStart();
+  state.tasks.push(newTask("", "", toISO(s), toISO(new Date(s.getFullYear(), s.getMonth()+2, 0)), "task"));
+  renderGantt();
+  var inputs=document.querySelectorAll("#taskList .epic:last-child input[data-tf='name']");
+  if(inputs.length) inputs[0].focus();
+});
+
+/* ---------------- Gantt: critical path (CPM) ---------------- */
+function computeCPM(){
+  var DAY=86400000;
+  var tasks=state.tasks.filter(function(t){ var a=parseD(t.start), b=parseD(t.end); return a && b && b>=a; });
+  var byId={}, succ={}, indeg={}, dur={};
+  tasks.forEach(function(t){ byId[t.id]=t; succ[t.id]=[]; indeg[t.id]=0; dur[t.id]=Math.max(0, Math.round((parseD(t.end)-parseD(t.start))/DAY)); });
+  tasks.forEach(function(t){ if(t.dep && byId[t.dep]){ succ[t.dep].push(t.id); indeg[t.id]++; } });
+  var q=tasks.filter(function(t){ return indeg[t.id]===0; }).map(function(t){ return t.id; });
+  var order=[], ES={}, EF={};
+  while(q.length){
+    var id=q.shift(); order.push(id);
+    ES[id] = (byId[id].dep && byId[byId[id].dep]) ? EF[byId[id].dep] : 0;
+    EF[id] = ES[id]+dur[id];
+    succ[id].forEach(function(s){ indeg[s]--; if(indeg[s]===0) q.push(s); });
+  }
+  if(order.length<tasks.length) return {cycle:true, crit:{}};
+  var projDur=0; tasks.forEach(function(t){ projDur=Math.max(projDur, EF[t.id]); });
+  var LS={}, LF={};
+  for(var i=order.length-1;i>=0;i--){
+    var t2=byId[order[i]];
+    LF[t2.id] = succ[t2.id].length ? Math.min.apply(null, succ[t2.id].map(function(s){ return LS[s]; })) : projDur;
+    LS[t2.id] = LF[t2.id]-dur[t2.id];
+  }
+  var crit={};
+  tasks.forEach(function(t){ if(LS[t.id]-ES[t.id]<=0) crit[t.id]=true; });
+  return {cycle:false, crit:crit};
+}
+
+/* ---------------- Gantt: chart ---------------- */
+function gMonths(){
+  var s=projStart(), e=projEnd();
+  var first=new Date(s.getFullYear(), s.getMonth(), 1);
+  var out=[], cur=new Date(first);
+  while(cur<=e && out.length<24){ out.push(new Date(cur)); cur=new Date(cur.getFullYear(), cur.getMonth()+1, 1); }
+  if(!out.length) out=[first];
+  return {list:out, start:first, end:new Date(first.getFullYear(), first.getMonth()+out.length, 1)};
+}
+function renderGanttChart(){
+  var box=$("ganttChart"); if(!box) return;
+  var gm=gMonths(), total=gm.end-gm.start;
+  function frac(d){ return Math.max(0, Math.min(1, (d-gm.start)/total)); }
+  var many = gm.list.length>12;
+  var head='<div class="g-head"><div class="g-corner">Task · '+esc(rangeLong())+'</div><div class="g-months">'
+    + gm.list.map(function(m){ return '<div class="g-month">'+MONTHS[m.getMonth()]+((many||m.getMonth()===0) ? " ’"+String(m.getFullYear()).slice(2) : "")+'</div>'; }).join("") + '</div></div>';
+  var grid='<div class="g-grid">'+gm.list.map(function(){ return "<div></div>"; }).join("")+'</div>';
+  var cpm=computeCPM();
+  var rowsHtml;
+  if(!state.tasks.length){
+    rowsHtml='<div class="g-row"><div class="g-label"><b>No tasks yet</b><small>Seed from epics or add tasks</small></div><div class="g-track"></div></div>';
+  } else {
+    rowsHtml = state.tasks.map(function(t){
+      var sd=parseD(t.start), ed=parseD(t.end);
+      var label='<div class="g-label"><b>'+esc(t.name||"Untitled task")+'</b><small>'+esc(t.owner||"Owner TBD")+(sd ? " · "+fmtRange(sd, ed||sd) : " · no dates")+'</small></div>';
+      var inner="", crit = state.showCrit && cpm.crit[t.id];
+      if(sd && t.type==="milestone"){
+        inner='<div class="g-mile'+(crit?" crit":"")+'" style="left:'+(frac(sd)*100)+'%" title="'+esc(t.name||"Milestone")+'"></div>';
+      } else if(sd && ed){
+        var l=frac(sd)*100, w=Math.max(0.8, (frac(ed)-frac(sd))*100);
+        inner='<div class="g-bar'+(crit?" crit":"")+'" style="left:'+l+'%;width:'+w+'%"><div class="fill" style="width:'+Math.max(0,Math.min(100,t.progress||0))+'%"></div>'+(w>7 ? '<span class="pct">'+(t.progress||0)+'%</span>' : "")+'</div>';
+      }
+      return '<div class="g-row">'+label+'<div class="g-track">'+inner+'</div></div>';
+    }).join("");
+  }
+  var rowH=46, H=Math.max(1, state.tasks.length)*rowH, paths="";
+  state.tasks.forEach(function(t, ri){
+    if(!t.dep) return;
+    var pi=-1;
+    state.tasks.forEach(function(x, xi){ if(String(x.id)===String(t.dep)) pi=xi; });
+    if(pi<0) return;
+    var pred=state.tasks[pi];
+    var pe=parseD(pred.end)||parseD(pred.start), ts=parseD(t.start);
+    if(!pe || !ts) return;
+    var x1=frac(pe)*1000, x2=frac(ts)*1000, y1=pi*rowH+rowH/2, y2=ri*rowH+rowH/2;
+    var mid=Math.max(x1+16, x2-16);
+    var crit = state.showCrit && cpm.crit[t.id] && cpm.crit[pred.id];
+    paths+='<path d="M '+x1.toFixed(1)+' '+y1+' H '+mid.toFixed(1)+' V '+y2+' H '+x2.toFixed(1)+'" fill="none" stroke="'+(crit ? "#b42318" : "#5c6b64")+'" stroke-width="1.6" vector-effect="non-scaling-stroke" marker-end="url(#gArrow)"/>';
+  });
+  var svg='<svg class="g-arrows" viewBox="0 0 1000 '+H+'" preserveAspectRatio="none" aria-hidden="true"><defs><marker id="gArrow" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#5c6b64"/></marker></defs>'+paths+'</svg>';
+  var today=new Date(); today.setHours(0,0,0,0);
+  var todayHtml = (today>=gm.start && today<gm.end) ? '<div class="g-today" style="left:calc(var(--glabel) + (100% - var(--glabel)) * '+frac(today).toFixed(4)+')"><span>Today</span></div>' : "";
+  box.innerHTML='<div class="g-chart">'+head+'<div class="g-body">'+grid+rowsHtml+svg+todayHtml+'</div></div>'
+    + '<div class="g-legend"><span><i style="background:var(--teal)"></i>Task — fill shows % complete</span>'
+    + '<span><i style="background:var(--accent);transform:rotate(45deg);border-radius:2px"></i>Milestone</span>'
+    + '<span><i style="background:var(--red)"></i>Critical path</span>'
+    + (cpm.cycle ? '<span style="color:var(--red)">Dependency cycle — critical path unavailable</span>' : "") + '</div>';
+}
+$("btnCrit").addEventListener("click", function(){
+  state.showCrit=!state.showCrit;
+  this.setAttribute("aria-pressed", state.showCrit ? "true" : "false");
+  renderGanttChart();
+});
+
+/* ---------------- Gantt: checks ---------------- */
+function renderGanttChecks(){
+  var el=$("ganttChecks"); if(!el) return;
+  var out=[];
+  if(!state.tasks.length) out.push({t:"warn", m:"No tasks yet — seed them from your epics, import a CSV, or add tasks one by one."});
+  var cpm=computeCPM();
+  if(cpm.cycle) out.push({t:"bad", m:"Dependency cycle: the “depends on” links loop back on themselves, so no valid order exists. Break the loop to restore the critical path."});
+  var byId={}; state.tasks.forEach(function(t){ byId[t.id]=t; });
+  state.tasks.forEach(function(t, i){
+    var label=t.name||("Task "+(i+1));
+    var sd=parseD(t.start), ed=parseD(t.end);
+    if(!sd || !ed) out.push({t:"warn", m:"“"+label+"” is missing a start or end date — it stays off the chart until both are set."});
+    else if(ed<sd) out.push({t:"bad", m:"“"+label+"” ends ("+fmtMY(ed)+") before it starts ("+fmtMY(sd)+")."});
+    else if(sd<projStart() || ed>projEnd()) out.push({t:"warn", m:"“"+label+"” sits outside the project window ("+rangeLong()+") — widen the dates in the Roadmap module, Step 1."});
+    if(!t.owner) out.push({t:"warn", m:"“"+label+"” has no owner."});
+    if(t.dep && byId[t.dep]){
+      var p=byId[t.dep], pend=parseD(p.end)||parseD(p.start);
+      if(sd && pend && sd<pend) out.push({t:"warn", m:"“"+label+"” starts "+fmtMY(sd)+" but depends on “"+(p.name||"a task")+"”, which finishes "+fmtMY(pend)+" — move the start or fix the dependency."});
+    }
+  });
+  if(!out.length) out.push({t:"ok", m:"Plan checks pass — every task has dates and an owner, and dependencies run in order."});
+  el.innerHTML = out.map(function(c){
+    var icon = c.t==="bad" ? "⛔" : (c.t==="warn" ? "⚠️" : "✓");
+    return '<div class="check '+c.t+'"><span aria-hidden="true">'+icon+'</span><div>'+esc(c.m)+'</div></div>';
+  }).join("");
+}
+function renderGantt(){ renderTasks(); renderGanttChart(); renderGanttChecks(); }
+
+/* ---------------- Gantt: CSV import ---------------- */
+function importTaskCSV(text){
+  var rows=parseCSV(text);
+  if(rows.length<2){ toast("That CSV looks empty — it needs a header row plus one row per task"); return; }
+  var head=rows[0].map(function(h){ return String(h).toLowerCase().trim(); });
+  function col(names){ for(var i=0;i<head.length;i++){ if(names.indexOf(head[i])>-1) return i; } return -1; }
+  var iType=col(["type","kind"]), iName=col(["name","title","task"]), iOwner=col(["owner","team","owner / team"]),
+      iStart=col(["start","start date","starts","from"]), iEnd=col(["end","end date","ends","to","finish"]),
+      iProg=col(["progress","% complete","percent","pct","complete"]), iDep=col(["depends","depends on","dependency","predecessor","after"]);
+  if(iName<0){ toast("Couldn't find a name column in that CSV — compare the header row with the template"); return; }
+  function get(r,i){ return i>=0 && r[i]!=null ? String(r[i]).trim() : ""; }
+  var tasks=[], byName={};
+  rows.slice(1).forEach(function(r){
+    var name=get(r,iName); if(!name) return;
+    var type=/mile/i.test(get(r,iType)) ? "milestone" : "task";
+    var s=parseCsvDate(get(r,iStart), false), e=parseCsvDate(get(r,iEnd), true);
+    if(type==="milestone"){ if(!s && e) s=e; e=s; }
+    else if(s && !e){ var sd=parseD(s); e=toISO(new Date(sd.getFullYear(), sd.getMonth()+2, 0)); }
+    else if(!s && e){ var ed=parseD(e); s=toISO(new Date(ed.getFullYear(), ed.getMonth()-1, 1)); }
+    var t=newTask(name, get(r,iOwner), s, e, type);
+    var p=parseInt(get(r,iProg),10); t.progress=isNaN(p) ? 0 : Math.max(0, Math.min(100, p));
+    t._depName=get(r,iDep);
+    tasks.push(t); byName[name.toLowerCase()]=t;
+  });
+  if(!tasks.length){ toast("No tasks found in that CSV — each row needs at least a name"); return; }
+  tasks.forEach(function(t){ if(t._depName && byName[t._depName.toLowerCase()]) t.dep=byName[t._depName.toLowerCase()].id; delete t._depName; });
+  state.tasks=tasks;
+  renderGantt();
+  toast("Imported "+tasks.length+" tasks from the CSV — check the dates and dependencies");
+}
+$("fTaskCsv").addEventListener("change", function(e){
+  var f=e.target.files && e.target.files[0]; if(!f) return;
+  var r=new FileReader();
+  r.onload=function(){ try{ importTaskCSV(String(r.result)); }catch(err){ toast("That file could not be read as a CSV"); } };
+  r.readAsText(f); e.target.value="";
+});
+$("btnTaskCsvTemplate").addEventListener("click", function(){
+  var csv="type,name,owner,start,end,progress,depends\n"
+    +"task,Requirements & design,Product,2027-01-05,2027-02-26,100,\n"
+    +"milestone,Design sign-off,Design,2027-02-26,2027-02-26,100,Requirements & design\n"
+    +"task,Build data migration,Platform,2027-03-01,2027-05-28,40,Requirements & design\n"
+    +"task,Pilot rollout,Delivery,2027-06-01,2027-08-27,0,Build data migration\n";
+  var a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"}));
+  a.download="gantt-tasks-template.csv"; a.click(); setTimeout(function(){ URL.revokeObjectURL(a.href); }, 2000);
+  toast("Template downloaded — fill it in, then load it with Import tasks (.csv)");
+});
+
+/* ---------------- Gantt: PPTX export ---------------- */
+function buildGanttSlide(pptx){
+  var s=pptx.addSlide(); s.background={color:"FFFFFF"};
+  addLogo(s, 0.3);
+  s.addText((state.product||"Project")+" — project plan", {x:0.55, y:0.32, w:10.2, h:0.55, fontSize:26, bold:true, color:"14201C", fontFace:"Arial"});
+  s.addText("Gantt chart · "+rangeLong()+" · Fill shows % complete, ◆ is a milestone, red outline is the critical path", {x:0.55, y:0.9, w:11.8, h:0.35, fontSize:12, color:"5C6B64", fontFace:"Arial"});
+  var gm=gMonths(), total=gm.end-gm.start, months=gm.list.length, many=months>12;
+  var x0=0.55, labelW=2.6, gridW=12.23-labelW, colW=gridW/months, y0=1.5, headH=0.42;
+  var rowH=Math.min(0.52, 4.85/Math.max(1, state.tasks.length));
+  function fx(d){ return x0+labelW+((d-gm.start)/total)*gridW; }
+  var cpm=computeCPM();
+  state.tasks.forEach(function(t, ri){
+    if(!t.dep) return;
+    var pi=-1;
+    state.tasks.forEach(function(x, xi){ if(String(x.id)===String(t.dep)) pi=xi; });
+    if(pi<0) return;
+    var pred=state.tasks[pi];
+    var pe=parseD(pred.end)||parseD(pred.start), ts=parseD(t.start);
+    if(!pe || !ts) return;
+    var lx1=fx(pe), lx2=fx(ts), ly1=y0+headH+pi*rowH+rowH/2, ly2=y0+headH+ri*rowH+rowH/2;
+    if(lx2>lx1){ var lopts={x:lx1, y:Math.min(ly1,ly2), w:lx2-lx1, h:Math.abs(ly2-ly1), line:{color:"8A968F", width:1}}; if(ly2<ly1) lopts.flipV=true; s.addShape(pptx.shapes.LINE, lopts); }
+  });
+  s.addShape(pptx.shapes.RECTANGLE, {x:x0, y:y0, w:labelW, h:headH, fill:{color:hex(state.primary)}, line:{type:"none"}});
+  s.addText("Task", {x:x0+0.12, y:y0+0.08, w:labelW-0.2, h:0.3, fontSize:11, bold:true, color:"FFFFFF", fontFace:"Arial"});
+  gm.list.forEach(function(m, i){
+    s.addShape(pptx.shapes.RECTANGLE, {x:x0+labelW+i*colW, y:y0, w:colW, h:headH, fill:{color:hex(state.primary)}, line:{color:"FFFFFF", width:1}});
+    s.addText(MONTHS[m.getMonth()]+((many||m.getMonth()===0) ? " ’"+String(m.getFullYear()).slice(2) : ""), {x:x0+labelW+i*colW, y:y0+0.09, w:colW, h:0.28, fontSize:months>14 ? 8 : 10, bold:true, color:"FFFFFF", fontFace:"Arial", align:"center"});
+  });
+  state.tasks.forEach(function(t, i){
+    var y=y0+headH+i*rowH;
+    var sd=parseD(t.start), ed=parseD(t.end);
+    var crit = state.showCrit && cpm.crit[t.id];
+    s.addShape(pptx.shapes.RECTANGLE, {x:x0, y:y, w:labelW, h:rowH, fill:{color:"F7F8F7"}, line:{color:"E6EAE6", width:0.75}});
+    s.addText(t.name||("Task "+(i+1)), {x:x0+0.12, y:y+0.05, w:labelW-0.2, h:0.26, fontSize:11, bold:true, color:"14201C", fontFace:"Arial"});
+    s.addText((t.owner||"Owner TBD")+(sd ? " · "+fmtRange(sd, ed||sd) : ""), {x:x0+0.12, y:y+0.28, w:labelW-0.2, h:0.22, fontSize:9, color:"5C6B64", fontFace:"Arial"});
+    for(var q=0;q<months;q++) s.addShape(pptx.shapes.RECTANGLE, {x:x0+labelW+q*colW, y:y, w:colW, h:rowH, fill:{color:"FFFFFF"}, line:{color:"E6EAE6", width:0.75}});
+    if(sd && t.type==="milestone"){
+      s.addShape(pptx.shapes.DIAMOND, {x:fx(sd)-0.11, y:y+rowH/2-0.11, w:0.22, h:0.22, fill:{color: crit ? "B42318" : hex(state.accent)}, line:{type:"none"}});
+      s.addText(t.name||"", {x:fx(sd)+0.16, y:y+rowH/2-0.13, w:2.2, h:0.26, fontSize:9.5, bold:true, color:"33413B", fontFace:"Arial"});
+    } else if(sd && ed){
+      var bx=fx(sd)+0.03, bw=Math.max(0.3, fx(ed)-fx(sd)-0.06);
+      s.addShape(pptx.shapes.ROUNDED_RECTANGLE, {x:bx, y:y+rowH*0.24, w:bw, h:rowH*0.52, fill:{color:"CFE3DE"}, line:{color: crit ? "B42318" : "147A6E", width: crit ? 1.75 : 1}, rectRadius:0.04});
+      var pw=bw*Math.max(0, Math.min(100, t.progress||0))/100;
+      if(pw>0.05) s.addShape(pptx.shapes.ROUNDED_RECTANGLE, {x:bx, y:y+rowH*0.24, w:pw, h:rowH*0.52, fill:{color: crit ? "B42318" : "147A6E"}, line:{type:"none"}, rectRadius:0.04});
+      if(bw>0.75) s.addText((t.progress||0)+"%", {x:bx+bw-0.62, y:y+rowH*0.24+0.02, w:0.55, h:rowH*0.45, fontSize:9, bold:true, color:"14201C", fontFace:"Arial", align:"right"});
+    }
+  });
+  addFooter(s, pptx);
+  return s;
+}
+$("btnGanttDownload").addEventListener("click", function(){
+  if(typeof PptxGenJS==="undefined"){ toast("The PowerPoint library hasn't loaded yet — check your connection and try again in a few seconds"); return; }
+  if(!state.tasks.length){ toast("Add at least one task first — or seed the plan from your epics"); return; }
+  var btn=this; btn.disabled=true; btn.textContent="Building deck…";
+  try{
+    var pptx=new PptxGenJS();
+    pptx.defineLayout({name:"WIDE", width:13.33, height:7.5}); pptx.layout="WIDE";
+    pptx.company=state.company||""; pptx.title=(state.product||"Project")+" — Gantt chart"; pptx.author=state.presenter||"";
+    buildGanttSlide(pptx);
+    var fname=(state.product||"project").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")+"-gantt.pptx";
+    pptx.writeFile({fileName: fname}).then(function(){ toast("Downloaded "+fname+" — the plan slide, in your brand kit"); })
+      .catch(function(){ toast("The download was blocked — try again"); })
+      .finally(function(){ btn.disabled=false; btn.textContent="⬇ Download Gantt .pptx"; });
+  }catch(err){
+    btn.disabled=false; btn.textContent="⬇ Download Gantt .pptx";
+    toast("Something went wrong building the file — your tasks are still here, try again");
+  }
+});
+
+/* ---------------- Init ---------------- */
+var initY=new Date().getFullYear()+1;
+state.startDate=initY+"-01-01"; state.endDate=initY+"-12-31";
+state.date = new Date().toISOString().slice(0,10);
+syncForm(); renderAll();
+</script>
+</body>
+</html>
