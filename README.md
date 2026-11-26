@@ -12,9 +12,10 @@ Or open `index.html` in any browser — no install, no server, nothing is upload
 
 - **Roadmap Deck (Module 1)** — pick a template (Timeline roadmap, Now / Next / Later, Executive), answer a short questionnaire (product, vision, audience, goal, headline metric), enter epics and features with owners, statuses and dates (or import both lists from CSV), let the draft assistant write the executive summary and speaker notes, run pre-flight checks, preview, and download a real 1–2 slide .pptx with your logo embedded.
 - **Gantt Chart (Module 2)** — tasks and milestones with owners, dates, % complete, and finish-to-start dependencies drawn as arrows; computed critical path, today line, plan checks; seed tasks from your epics & features or import from CSV; download a branded Gantt .pptx slide.
+- **Status Report Deck (Module 3)** — weekly report builder: pick the reporting week, set RAG health with a reason, accomplishments, milestones prefilled from epics/features/Gantt, risks/issues with owner and mitigation, decisions needed, next steps; archive the week and start the next with risks/decisions carried forward; download a branded 2-slide status .pptx.
 - **Suite guide** — how the modules fit together and what's planned next.
 
-Planned: Status Report Deck, RAID Log, Charter & Kickoff, Portfolio Dashboard.
+Planned: RAID Log, Charter & Kickoff, Portfolio Dashboard.
 
 ## Shared spine
 
