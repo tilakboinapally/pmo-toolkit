@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="color-scheme" content="light dark" />
 <link rel="icon" href="data:," />
-<title>PM Suite — Roadmap Deck & Gantt Chart Builder</title>
+<title>PMO Toolkit — Roadmap, Gantt & Status Report Decks</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
@@ -215,6 +215,36 @@ details.llm pre{white-space:pre-wrap;background:var(--panel-2);border:1px solid 
 .order-list li{margin-bottom:9px}
 .order-list li b{font-weight:800}
 code.path{font-family:"IBM Plex Mono",monospace;font-size:12.5px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:1px 6px}
+
+/* Status Report */
+.rag-seg{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.rag-btn{border:1.5px solid var(--line);background:var(--panel);border-radius:10px;padding:10px 8px;font-weight:800;font-size:14px;cursor:pointer;min-height:46px;color:var(--muted)}
+.rag-btn[data-rag="red"][aria-pressed="true"]{background:#b42318;border-color:#b42318;color:#fff}
+.rag-btn[data-rag="amber"][aria-pressed="true"]{background:#b7791f;border-color:#b7791f;color:#fff}
+.rag-btn[data-rag="green"][aria-pressed="true"]{background:#067647;border-color:#067647;color:#fff}
+.sr-row{display:grid;grid-template-columns:minmax(0,1fr) 38px;gap:6px;margin-bottom:6px}
+.sr-row input{border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--ink);padding:7px 8px;font-size:14px;min-height:38px;width:100%}
+.sr-row2{display:grid;grid-template-columns:minmax(0,1fr) 150px 38px;gap:6px;margin-bottom:6px}
+.sr-row2 input{border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--ink);padding:7px 8px;font-size:14px;min-height:38px;width:100%}
+.sr-row3{display:grid;grid-template-columns:minmax(0,1fr) 150px 140px 38px;gap:6px;margin-bottom:6px}
+.sr-row3 input{border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--ink);padding:7px 8px;font-size:14px;min-height:38px;width:100%}
+@media (max-width:520px){ .sr-row2{grid-template-columns:minmax(0,1fr) 38px} .sr-row2 input[type="date"]{grid-column:1} .sr-row3{grid-template-columns:minmax(0,1fr) 38px} .sr-row3 input{grid-column:1} .sr-row3 .icon-btn{grid-column:2;grid-row:1} }
+.sr-sub{font-size:12px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin:16px 0 8px}
+.sr-sub:first-child{margin-top:0}
+.risk-card{border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:12px;background:var(--panel)}
+.hist-item{display:flex;gap:10px;align-items:center;border:1px solid var(--line);border-radius:10px;padding:9px 12px;margin-bottom:8px;font-size:13.5px}
+.hist-item .grow{flex:1;min-width:0}
+.rag-pill{display:inline-block;font-weight:800;font-size:.8em;padding:.28em .8em;border-radius:999px;color:#fff;letter-spacing:.04em;text-transform:uppercase}
+.rag-pill.red{background:#b42318}.rag-pill.amber{background:#b7791f}.rag-pill.green{background:#067647}
+.st-cols{display:grid;grid-template-columns:1fr 1fr;gap:1.2em;flex:1;min-height:0}
+.st-cols h4{margin:0 0 .5em;font-size:1em}
+.st-cols ul{margin:0;padding-left:1.15em;line-height:1.5;font-size:.92em}
+.st-cols ul li{margin-bottom:.3em}
+.st-band{display:flex;gap:1em;align-items:center;background:#f2f5f3;border:1px solid #dfe5df;border-radius:10px;padding:.75em .95em;margin-bottom:1em}
+.st-band .why{font-size:.98em;line-height:1.4;font-weight:600}
+.st-table{width:100%;border-collapse:collapse;font-size:.88em;line-height:1.4}
+.st-table th{text-align:left;font-size:.78em;letter-spacing:.06em;text-transform:uppercase;color:#5c6b64;padding:.35em .5em;border-bottom:2px solid #d9ded9}
+.st-table td{padding:.4em .5em;border-bottom:1px solid #e6eae6;vertical-align:top}
 </style>
 </head>
 <body>
@@ -237,11 +267,11 @@ code.path{font-family:"IBM Plex Mono",monospace;font-size:12.5px;background:var(
     <h3>Modules</h3>
     <button type="button" class="nav-item" data-view="roadmap" aria-current="true"><span class="grow">Roadmap Deck<span class="nav-sub">Questionnaire → roadmap .pptx</span></span><span class="tag">Live</span></button>
     <button type="button" class="nav-item" data-view="gantt" aria-current="false"><span class="grow">Gantt Chart<span class="nav-sub">Project plan, dependencies, critical path</span></span><span class="tag">Live</span></button>
+    <button type="button" class="nav-item" data-view="status" aria-current="false"><span class="grow">Status Report Deck<span class="nav-sub">Weekly RAG report, prefilled from the plan</span></span><span class="tag">Live</span></button>
     <h3>Guide</h3>
     <button type="button" class="nav-item" data-view="about" aria-current="false"><span class="grow">Suite guide &amp; roadmap<span class="nav-sub">How it fits together · what to build next</span></span></button>
     <h3>Coming next</h3>
-    <div class="nav-static"><span class="grow">Status Report Deck</span><span class="tag plan">Next</span></div>
-    <div class="nav-static"><span class="grow">RAID Log</span><span class="tag plan">Planned</span></div>
+    <div class="nav-static"><span class="grow">RAID Log</span><span class="tag plan">Next</span></div>
     <div class="nav-static"><span class="grow">Charter &amp; Kickoff Deck</span><span class="tag plan">Planned</span></div>
     <div class="nav-static"><span class="grow">Portfolio Dashboard</span><span class="tag plan">Planned</span></div>
   </aside>
@@ -382,16 +412,103 @@ code.path{font-family:"IBM Plex Mono",monospace;font-size:12.5px;background:var(
     </div>
   </section>
 
+  <!-- ============ STATUS REPORT MODULE ============ -->
+  <section class="view" id="view-status" aria-label="Status Report Deck module" hidden>
+    <div class="layout">
+      <div>
+        <section class="card" aria-labelledby="h-sweek">
+          <div class="card-head"><span class="step-num">WEEK</span><div><h2 id="h-sweek">Reporting week &amp; overall health</h2><p>Pick the week, call the RAG honestly, and give the one-line reason a steering group will repeat. Milestones below prefill from your epics, features, and Gantt plan.</p></div></div>
+          <div class="card-body">
+            <div class="grid2">
+              <div class="field"><label for="sWeekStart">Week starting (Monday)</label><input type="date" id="sWeekStart"></div>
+              <div class="field"><label>Week ending</label><input type="text" id="sWeekEnd" disabled value=""></div>
+            </div>
+            <div class="file-row" style="margin-bottom:14px">
+              <button class="btn small" id="btnThisWeek" type="button">Jump to this week</button>
+              <button class="btn small" id="btnPrefill" type="button">↻ Refresh milestones from project data</button>
+            </div>
+            <div class="field"><label>Overall health (RAG)</label>
+              <div class="rag-seg" role="group" aria-label="Overall RAG health">
+                <button type="button" class="rag-btn" data-rag="red" aria-pressed="false">🔴 Red</button>
+                <button type="button" class="rag-btn" data-rag="amber" aria-pressed="false">🟠 Amber</button>
+                <button type="button" class="rag-btn" data-rag="green" aria-pressed="true">🟢 Green</button>
+              </div>
+            </div>
+            <div class="field"><label for="sRagReason">One-line reason for this RAG</label><input type="text" id="sRagReason" placeholder="e.g. On track — pilot build finished, rollout starts Monday"></div>
+            <div id="sHistoryInfo"></div>
+            <div class="file-row">
+              <button class="btn accent" id="btnArchiveWeek" type="button">Archive this week &amp; start next week →</button>
+            </div>
+            <p class="csv-note" style="margin-bottom:0">Archiving keeps this report in the history below (and in your saved project file), moves the week forward 7 days, and starts the new report prefilled from this one — open risks and decisions carry over, last week's next steps become this week's starting accomplishments, and milestones refresh from the plan. Everything is kept in this tab while you work; download the project file to keep it for good.</p>
+            <div id="sHistoryList" style="margin-top:10px"></div>
+          </div>
+        </section>
+
+        <section class="card" aria-labelledby="h-sdone">
+          <div class="card-head"><span class="step-num">DONE</span><div><h2 id="h-sdone">Accomplished this week</h2><p>What actually shipped or moved — one line each, written for someone who wasn't in the room.</p></div></div>
+          <div class="card-body">
+            <div id="sAccompList"></div>
+            <button class="btn accent" id="btnAddAccomp" type="button">+ Add accomplishment</button>
+          </div>
+        </section>
+
+        <section class="card" aria-labelledby="h-smile">
+          <div class="card-head"><span class="step-num">MILE</span><div><h2 id="h-smile">Milestones — hit &amp; upcoming</h2><p>Prefilled from feature dates, epic dates, and Gantt milestones that fall in or just after this week. Edit freely — the prefill never overwrites lines you've typed.</p></div></div>
+          <div class="card-body">
+            <div class="sr-sub">Hit this week</div>
+            <div id="sHitList"></div>
+            <button class="btn small" id="btnAddHit" type="button">+ Add milestone hit</button>
+            <div class="sr-sub">Coming up</div>
+            <div id="sUpList"></div>
+            <button class="btn small" id="btnAddUp" type="button">+ Add upcoming milestone</button>
+          </div>
+        </section>
+
+        <section class="card" aria-labelledby="h-srisk">
+          <div class="card-head"><span class="step-num">RISK</span><div><h2 id="h-srisk">Risks &amp; issues</h2><p>Each one gets an owner and a mitigation — a risk with neither is just a worry.</p></div></div>
+          <div class="card-body">
+            <div id="sRiskList"></div>
+            <button class="btn accent" id="btnAddRisk" type="button">+ Add risk / issue</button>
+          </div>
+        </section>
+
+        <section class="card" aria-labelledby="h-sdec">
+          <div class="card-head"><span class="step-num">ASK</span><div><h2 id="h-sdec">Decisions needed &amp; next steps</h2><p>Decisions name who has to decide; next steps become next week's starting point when you archive.</p></div></div>
+          <div class="card-body">
+            <div class="sr-sub">Decisions needed</div>
+            <div id="sDecList"></div>
+            <button class="btn small" id="btnAddDec" type="button">+ Add decision</button>
+            <div class="sr-sub">Next steps — next week</div>
+            <div id="sNextList"></div>
+            <button class="btn small" id="btnAddNext" type="button">+ Add next step</button>
+            <div class="sr-sub">Project file</div>
+            <div class="file-row">
+              <button class="btn" id="btnStatusExport" type="button">Download project file (.json)</button>
+              <button class="btn" id="btnStatusImport" type="button">Open project file (.json)</button>
+            </div>
+            <p class="csv-note" style="margin-bottom:0">The project file is the same one the Roadmap module saves — it now carries this report and the archived-week history too, alongside the epics and Gantt tasks.</p>
+          </div>
+        </section>
+      </div>
+      <div class="preview-col">
+        <div class="preview-head"><h2>Live slide preview</h2><span class="spacer"></span><span style="font-size:13px;color:var(--muted);font-weight:700">2 slides · 16:9</span>
+          <button class="btn primary" id="btnStatusDownload" type="button">⬇ Download status .pptx</button>
+        </div>
+        <div id="statusPreview"></div>
+      </div>
+    </div>
+  </section>
+
   <!-- ============ SUITE GUIDE ============ -->
   <section class="view" id="view-about" aria-label="Suite guide" hidden>
     <section class="card" aria-labelledby="h-spine">
       <div class="card-head"><span class="step-num">SUITE</span><div><h2 id="h-spine">How the suite fits together — one shared spine</h2><p>Every module reads from the same project file, so nothing gets typed twice.</p></div></div>
       <div class="card-body">
-        <p style="margin:0 0 6px;font-size:14.5px;line-height:1.6">The questionnaire, brand kit, epics, features, and tasks live in <b>one project</b>. Your roadmap epics seed the Gantt plan; the Gantt milestones will feed the status report; the brand kit (logo, colors, footer) and the .pptx engine are shared by every deck. Saving the project file in the Roadmap module (Step 5) now carries the tasks too — reopen it and every module picks up where you left off.</p>
+        <p style="margin:0 0 6px;font-size:14.5px;line-height:1.6">The questionnaire, brand kit, epics, features, and tasks live in <b>one project</b>. Your roadmap epics seed the Gantt plan; the epics, features, and Gantt milestones prefill the weekly status report; the brand kit (logo, colors, footer) and the .pptx engine are shared by every deck. Saving the project file in the Roadmap module (Step 5) carries the tasks, the current status report, and its archived-week history too — reopen it and every module picks up where you left off.</p>
         <div class="mod-row"><span class="grow"><b>Roadmap Deck</b><p>Questionnaire → cover, timeline / Now-Next-Later / Executive slides. Epics &amp; features, CSV import, 2-year date-based timeline, LLM draft assistant, pre-flight checks.</p></span><span class="tag">Live</span></div>
         <div class="mod-row"><span class="grow"><b>Gantt Chart</b><p>Tasks with owners, dates, % complete, finish-to-start dependencies, milestones, and a computed critical path. Seeds from your epics, imports its own CSV, exports a plan slide in the same brand kit.</p></span><span class="tag">Live</span></div>
-        <div class="mod-row"><span class="grow"><b>Status Report Deck</b><p>The weekly PMO artifact: RAG health, what shipped, what's next, risks and decisions needed. Should pre-fill from epics and tasks and remember last week's report.</p></span><span class="tag plan">Next</span></div>
-        <div class="mod-row"><span class="grow"><b>RAID Log</b><p>Risks, assumptions, issues, and dependencies as a register, plus a one-pager slide for steerco. Feeds the status deck's risks section.</p></span><span class="tag plan">Planned</span></div>
+        <div class="mod-row"><span class="grow"><b>Status Report Deck</b><p>The weekly PMO artifact: pick the reporting week, set RAG health with a one-line reason, accomplishments, milestones hit and upcoming (prefilled from epics, features, and Gantt milestones), risks and issues with owner and mitigation, decisions needed, and next steps. Archiving a week starts the next one prefilled from it, and the branded 2-slide .pptx uses the shared brand kit.</p></span><span class="tag">Live</span></div>
+        <div class="mod-row"><span class="grow"><b>RAID Log</b><p>Risks, assumptions, issues, and dependencies as a register, plus a one-pager slide for steerco. Feeds the status deck's risks section.</p></span><span class="tag plan">Next</span></div>
         <div class="mod-row"><span class="grow"><b>Charter &amp; Kickoff Deck</b><p>Scope, objectives, success criteria, team, and timeline — mostly a new arrangement of answers the questionnaire already collects.</p></span><span class="tag plan">Planned</span></div>
         <div class="mod-row"><span class="grow"><b>Portfolio Dashboard</b><p>Health rollup across several saved projects for the PMO / executive view. Only worth building once you have a few projects saved.</p></span><span class="tag plan">Later</span></div>
       </div>
@@ -401,11 +518,11 @@ code.path{font-family:"IBM Plex Mono",monospace;font-size:12.5px;background:var(
       <div class="card-head"><span class="step-num">ORDER</span><div><h2 id="h-order">Recommended build order</h2><p>Each step reuses what the previous one already stores.</p></div></div>
       <div class="card-body">
         <ol class="order-list">
-          <li><b>Status Report Deck next.</b> It's the highest-frequency PMO artifact — weekly, not quarterly — and it can pre-fill from the epics, tasks, and at-risk flags already in the project file.</li>
-          <li><b>RAID Log after that.</b> Same register pattern as the task list, and its risks flow straight into the status deck.</li>
-          <li><b>Charter &amp; Kickoff Deck.</b> Low new data — it rearranges the questionnaire, brand kit, and timeline you already have.</li>
+          <li><b>RAID Log next.</b> Same register pattern as the task list, and its risks flow straight into the status deck — the status module's risks section is ready to be fed by it.</li>
+          <li><b>Charter &amp; Kickoff Deck after that.</b> Low new data — it rearranges the questionnaire, brand kit, and timeline you already have.</li>
           <li><b>Portfolio Dashboard last.</b> A rollup needs several saved projects before it means anything.</li>
         </ol>
+        <p style="margin:10px 0 0;font-size:13.5px;color:var(--muted);line-height:1.55">Done so far, in order: Roadmap Deck, Gantt Chart, Status Report Deck.</p>
       </div>
     </section>
 
@@ -437,6 +554,10 @@ function newEpic(name, owner, s, e, status, summary){
 }
 function newFeature(name, date, status){ return {id: uid++, name: name||"", date: date||"", status: status||"planned"}; }
 function newTask(name, owner, s, e, type){ return {id: uid++, name: name||"", owner: owner||"", start: s||"", end: e||"", progress: 0, dep: "", type: type||"task"}; }
+function newLine(text){ return {id: uid++, text: text||""}; }
+function newMile(text, date, owner){ return {id: uid++, text: text||"", date: date||"", owner: owner||""}; }
+function newRisk(text, owner, mitigation){ return {id: uid++, text: text||"", owner: owner||"", mitigation: mitigation||""}; }
+function newOwned(text, owner){ return {id: uid++, text: text||"", owner: owner||""}; }
 
 var state = {
   template: "timeline",
@@ -445,7 +566,10 @@ var state = {
   company:"", footer:"", primary:"#0f3b4d", accent:"#e9a23b", logoPos:"tr",
   logoData:null, logoType:null,
   summary:"", notes:"",
-  epics: [], tasks: [], showCrit: true
+  epics: [], tasks: [], showCrit: true,
+  statusWeekStart:"", statusRag:"green", statusRagReason:"",
+  statusAccomplished: [], statusHit: [], statusUpcoming: [], statusRisks: [], statusDecisions: [], statusNext: [],
+  statusHistory: []
 };
 
 function $(id){ return document.getElementById(id); }
@@ -499,6 +623,14 @@ function loadExample(){
   e4.features.push(newFeature("Draft suggestions","2028-02-15","planned"), newFeature("Tone controls","2028-05-20","planned"));
   state.epics.push(e1,e2,e3,e4);
   seedTasks(false);
+  state.statusWeekStart="2027-02-08"; state.statusRag="amber";
+  state.statusRagReason="Onboarding is moving, but the AI assistant is blocked on the data-retention review";
+  state.statusAccomplished=[newLine("Onboarding checklist shipped to pilot customers"), newLine("Invoice history beta opened to the billing group")];
+  state.statusHit=[]; state.statusUpcoming=[]; state.statusHistory=[];
+  state.statusRisks=[newRisk("AI Reply Assistant blocked on data-retention review","ML Team","Decision requested from Legal this week; prototype continues on synthetic data")];
+  state.statusDecisions=[newOwned("Approve the data-retention approach for AI drafts","Legal / Product")];
+  state.statusNext=[newOwned("Start progress nudges build","Design + Web"), newOwned("Confirm pilot feedback session dates","Priya Nair")];
+  prefillMilestones(false);
   state.summary=""; state.notes="";
   syncForm(); generateCopy(false); renderAll();
   toast("Example loaded — edit anything, then download the .pptx");
@@ -516,7 +648,7 @@ function syncForm(){
   document.querySelectorAll("[data-template]").forEach(function(b){ b.setAttribute("aria-pressed", b.getAttribute("data-template")===state.template ? "true":"false"); });
 }
 function bind(id, key, isNum){
-  $(id).addEventListener("input", function(e){ state[key]=e.target.value; renderPreview(); renderChecks(); renderPrompt(); renderGanttChart(); renderGanttChecks(); });
+  $(id).addEventListener("input", function(e){ state[key]=e.target.value; renderPreview(); renderChecks(); renderPrompt(); renderGanttChart(); renderGanttChecks(); renderStatusPreview(); });
 }
 bind("fProduct","product"); bind("fTagline","tagline"); bind("fAudience","audience"); bind("fPresenter","presenter");
 bind("fStart","startDate"); bind("fEnd","endDate"); bind("fDate","date"); bind("fGoal","goal"); bind("fMetric","metric"); bind("fMetricTarget","metricTarget");
@@ -866,21 +998,23 @@ function renderPreview(){
   $("preview").innerHTML = slides.map(function(s){ return '<div class="slide-label">'+s[0]+'</div>'+s[1]; }).join("")
     + (state.notes ? '<div class="slide-label">Speaker notes (slide 1, in the .pptx)</div><div class="notes-box">'+esc(state.notes)+'</div>' : "");
 }
-function renderAll(){ renderEpics(); renderPreview(); renderChecks(); renderPrompt(); renderGantt(); }
+function renderAll(){ renderEpics(); renderPreview(); renderChecks(); renderPrompt(); renderGantt(); renderStatus(); }
 
 /* ---------------- Toolbar actions ---------------- */
 $("btnExample").addEventListener("click", loadExample);
 $("btnClear").addEventListener("click", function(){
   state.product=""; state.tagline=""; state.audience=""; state.presenter=""; state.goal=""; state.metric=""; state.metricTarget="";
   state.company=""; state.footer=""; state.summary=""; state.notes=""; state.epics=[]; state.tasks=[]; state.logoData=null;
+  state.statusRag="green"; state.statusRagReason=""; state.statusAccomplished=[]; state.statusHit=[]; state.statusUpcoming=[]; state.statusRisks=[]; state.statusDecisions=[]; state.statusNext=[]; state.statusHistory=[];
+  state.statusWeekStart=toISO(mondayOf(new Date()));
   var ny=new Date().getFullYear()+1; state.startDate=ny+"-01-01"; state.endDate=ny+"-12-31";
   $("fLogo").value=""; renderLogoPreview(); syncForm(); renderAll(); toast("Cleared — start from the questionnaire in Step 1");
 });
 $("btnExportJson").addEventListener("click", function(){
-  var data=JSON.stringify({product:state.product,tagline:state.tagline,audience:state.audience,presenter:state.presenter,startDate:state.startDate,endDate:state.endDate,date:state.date,goal:state.goal,metric:state.metric,metricTarget:state.metricTarget,company:state.company,footer:state.footer,primary:state.primary,accent:state.accent,template:state.template,summary:state.summary,notes:state.notes,epics:state.epics,tasks:state.tasks}, null, 2);
+  var data=JSON.stringify({product:state.product,tagline:state.tagline,audience:state.audience,presenter:state.presenter,startDate:state.startDate,endDate:state.endDate,date:state.date,goal:state.goal,metric:state.metric,metricTarget:state.metricTarget,company:state.company,footer:state.footer,primary:state.primary,accent:state.accent,template:state.template,summary:state.summary,notes:state.notes,epics:state.epics,tasks:state.tasks,statusWeekStart:state.statusWeekStart,statusRag:state.statusRag,statusRagReason:state.statusRagReason,statusAccomplished:state.statusAccomplished,statusHit:state.statusHit,statusUpcoming:state.statusUpcoming,statusRisks:state.statusRisks,statusDecisions:state.statusDecisions,statusNext:state.statusNext,statusHistory:state.statusHistory}, null, 2);
   var a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([data],{type:"application/json"}));
   a.download=(state.product||"project").toLowerCase().replace(/[^a-z0-9]+/g,"-")+"-project.json"; a.click(); setTimeout(function(){ URL.revokeObjectURL(a.href); }, 2000);
-  toast("Project saved as JSON — epics, features, and Gantt tasks included");
+  toast("Project saved as JSON — epics, Gantt tasks, and the status report with its history included");
 });
 $("fImport").addEventListener("change", function(e){
   var f=e.target.files && e.target.files[0]; if(!f) return;
@@ -895,7 +1029,15 @@ $("fImport").addEventListener("change", function(e){
       }); uid=10000; state.epics.forEach(function(ep){ ep.id=uid++; ep.features.forEach(function(ft){ ft.id=uid++; }); }); }
       if(Array.isArray(d.tasks)){ var tmap={}; state.tasks=d.tasks; state.tasks.forEach(function(t){ var nid=uid++; tmap[t.id]=nid; t.id=nid; });
         state.tasks.forEach(function(t){ t.dep = tmap[t.dep]!=null ? tmap[t.dep] : ""; if(typeof t.progress!=="number") t.progress=parseInt(t.progress,10)||0; if(t.type!=="milestone") t.type="task"; t.name=t.name||""; t.owner=t.owner||""; t.start=t.start||""; t.end=t.end||""; }); }
-      syncForm(); renderAll(); toast("Project loaded — roadmap and Gantt are both up to date");
+      if(d.statusWeekStart!=null){ state.statusWeekStart=String(d.statusWeekStart); }
+      if(d.statusRag && ["red","amber","green"].indexOf(d.statusRag)>-1) state.statusRag=d.statusRag;
+      if(d.statusRagReason!=null) state.statusRagReason=String(d.statusRagReason);
+      [["statusAccomplished"],["statusHit"],["statusUpcoming"],["statusRisks"],["statusDecisions"],["statusNext"]].forEach(function(pair){
+        var k=pair[0];
+        if(Array.isArray(d[k])){ state[k]=d[k].map(function(it){ var o={}; Object.keys(it||{}).forEach(function(f){ if(f!=="id") o[f]=it[f]; }); o.id=uid++; if(o.text==null) o.text=""; return o; }); }
+      });
+      if(Array.isArray(d.statusHistory)) state.statusHistory=d.statusHistory.map(function(h){ var c={}; Object.keys(h||{}).forEach(function(k){ c[k]=h[k]; }); c.rag=validRag(c.rag); if(c.weekStart!=null) c.weekStart=String(c.weekStart); if(c.weekLabel!=null) c.weekLabel=String(c.weekLabel); if(c.ragReason!=null) c.ragReason=String(c.ragReason); return c; });
+      syncForm(); renderAll(); toast("Project loaded — roadmap, Gantt, and status report are all up to date");
     }catch(err){ toast("That file could not be read as a roadmap JSON"); }
   };
   r.readAsText(f); e.target.value="";
@@ -1143,10 +1285,11 @@ $("btnDownload").addEventListener("click", function(){
 var VIEW_HINTS={
   roadmap:"Answer the questionnaire, add epics & features, pick a template — then download a real PowerPoint file.",
   gantt:"Build the project plan on the same project dates and brand kit: tasks, dependencies, milestones, and the critical path.",
+  status:"The weekly report on the same project: RAG health, what shipped, milestones, risks, decisions — prefilled from your epics and plan.",
   about:"How the modules fit together, what is built, and the recommended order for what comes next."
 };
 function showView(name){
-  ["roadmap","gantt","about"].forEach(function(v){ $("view-"+v).hidden = v!==name; });
+  ["roadmap","gantt","status","about"].forEach(function(v){ $("view-"+v).hidden = v!==name; });
   document.querySelectorAll(".nav-item").forEach(function(b){ b.setAttribute("aria-current", b.getAttribute("data-view")===name ? "true" : "false"); });
   $("barHint").textContent = VIEW_HINTS[name];
   var isRoad = name==="roadmap";
@@ -1154,6 +1297,7 @@ function showView(name){
   $("btnExample").style.display = isRoad ? "" : "none";
   $("btnDownload").style.display = isRoad ? "" : "none";
   if(name==="gantt") renderGantt();
+  if(name==="status") renderStatus();
   window.scrollTo({top:0, behavior:"smooth"});
 }
 document.querySelectorAll(".nav-item").forEach(function(b){
@@ -1467,10 +1611,264 @@ $("btnGanttDownload").addEventListener("click", function(){
   }
 });
 
+/* ---------------- Status Report: week helpers ---------------- */
+function mondayOf(d){ var x=new Date(d.getFullYear(), d.getMonth(), d.getDate()); var day=(x.getDay()+6)%7; x.setDate(x.getDate()-day); return x; }
+function fmtDay(d){ return d ? MONTHS[d.getMonth()]+" "+d.getDate()+", "+d.getFullYear() : ""; }
+function weekStartDate(){ return parseD(state.statusWeekStart) || mondayOf(new Date()); }
+function weekEndDate(){ var s=weekStartDate(); return new Date(s.getFullYear(), s.getMonth(), s.getDate()+6); }
+function weekLabel(){ return fmtDay(weekStartDate())+" – "+fmtDay(weekEndDate()); }
+function validRag(v){ return ["red","amber","green"].indexOf(v)>-1 ? v : "green"; }
+function ragMeta(){ return ({red:{label:"Red",color:"#b42318",hex:"B42318"},amber:{label:"Amber",color:"#b7791f",hex:"B7791F"},green:{label:"Green",color:"#067647",hex:"067647"}})[validRag(state.statusRag)] || {label:"Green",color:"#067647",hex:"067647"}; }
+
+/* ---------------- Status Report: prefill from shared project data ---------------- */
+function prefillMilestones(announce){
+  var ws=weekStartDate(), we=weekEndDate();
+  var horizon=new Date(we.getFullYear(), we.getMonth(), we.getDate()+21);
+  function has(list, text){ return list.some(function(x){ return x.text===text; }); }
+  var addedH=0, addedU=0;
+  var items=[];
+  state.epics.forEach(function(ep){
+    ep.features.forEach(function(f){ if(f.name && f.date) items.push({text:f.name+" — "+(ep.name||"Epic"), date:f.date, owner:ep.owner||""}); });
+    if(ep.name && ep.end) items.push({text:ep.name+" (epic completes)", date:ep.end, owner:ep.owner||""});
+    if(ep.name && ep.start) items.push({text:ep.name+" (epic starts)", date:ep.start, owner:ep.owner||""});
+  });
+  state.tasks.forEach(function(t){
+    if(!t.name) return;
+    if(t.type==="milestone" && t.start) items.push({text:t.name, date:t.start, owner:t.owner||""});
+    else if(t.type==="task" && t.end && (t.progress||0)>=100) items.push({text:t.name+" (complete)", date:t.end, owner:t.owner||""});
+  });
+  items.forEach(function(it){
+    var d=parseD(it.date); if(!d) return;
+    if(d>=ws && d<=we){ if(!has(state.statusHit, it.text)){ state.statusHit.push(newMile(it.text, it.date, it.owner)); addedH++; } }
+    else if(d>we && d<=horizon){ if(!has(state.statusUpcoming, it.text)){ state.statusUpcoming.push(newMile(it.text, it.date, it.owner)); addedU++; } }
+  });
+  if(announce){ renderStatus(); toast(addedH+addedU ? "Prefilled "+addedH+" milestone"+(addedH===1?"":"s")+" hit and "+addedU+" upcoming from your epics, features, and Gantt plan" : "Nothing new to prefill — no feature, epic, or Gantt dates fall in this week or the 3 weeks after it"); }
+  return addedH+addedU;
+}
+
+/* ---------------- Status Report: editors ---------------- */
+function srEmpty(msg){ return '<div class="empty">'+msg+'</div>'; }
+function renderStatusLists(){
+  var ac=$("sAccompList"); if(!ac) return;
+  ac.innerHTML = state.statusAccomplished.length ? state.statusAccomplished.map(function(it){
+    return '<div class="sr-row" data-sid="'+it.id+'"><input type="text" data-sf="text" value="'+esc(it.text)+'" placeholder="e.g. Pilot build finished and handed to QA" aria-label="Accomplishment"><button type="button" class="icon-btn" data-sact="del" title="Remove" aria-label="Remove">×</button></div>';
+  }).join("") : srEmpty("Nothing yet — add the first accomplishment above last week's next steps.");
+  $("sHitList").innerHTML = state.statusHit.length ? state.statusHit.map(function(it){
+    return '<div class="sr-row2" data-sid="'+it.id+'"><input type="text" data-sf="text" value="'+esc(it.text)+'" placeholder="Milestone" aria-label="Milestone hit"><input type="date" data-sf="date" value="'+esc(it.date)+'" aria-label="Milestone date"><button type="button" class="icon-btn" data-sact="del" title="Remove" aria-label="Remove">×</button></div>';
+  }).join("") : srEmpty("No milestones hit yet this week.");
+  $("sUpList").innerHTML = state.statusUpcoming.length ? state.statusUpcoming.map(function(it){
+    return '<div class="sr-row3" data-sid="'+it.id+'"><input type="text" data-sf="text" value="'+esc(it.text)+'" placeholder="Milestone" aria-label="Upcoming milestone"><input type="date" data-sf="date" value="'+esc(it.date)+'" aria-label="Milestone date"><input type="text" data-sf="owner" value="'+esc(it.owner)+'" placeholder="Owner" aria-label="Milestone owner"><button type="button" class="icon-btn" data-sact="del" title="Remove" aria-label="Remove">×</button></div>';
+  }).join("") : srEmpty("Nothing upcoming on record — refresh the prefill from the Week card.");
+  $("sRiskList").innerHTML = state.statusRisks.length ? state.statusRisks.map(function(it){
+    return '<div class="risk-card" data-sid="'+it.id+'"><div class="epic-top"><strong style="margin-right:auto;font-size:14px">'+esc(it.text||"Risk / issue")+'</strong><button type="button" class="icon-btn" data-sact="del" title="Remove risk" aria-label="Remove risk">×</button></div>'
+      + '<div class="field"><label>Risk / issue</label><input type="text" data-sf="text" value="'+esc(it.text)+'" placeholder="What could go wrong, or already has"></div>'
+      + '<div class="grid2"><div class="field"><label>Owner</label><input type="text" data-sf="owner" value="'+esc(it.owner)+'" placeholder="Who owns it"></div>'
+      + '<div class="field"><label>Mitigation</label><input type="text" data-sf="mitigation" value="'+esc(it.mitigation)+'" placeholder="What is being done about it"></div></div></div>';
+  }).join("") : srEmpty("No risks or issues recorded — if that is true, the RAG reason should say so.");
+  $("sDecList").innerHTML = state.statusDecisions.length ? state.statusDecisions.map(function(it){
+    return '<div class="sr-row2" data-sid="'+it.id+'"><input type="text" data-sf="text" value="'+esc(it.text)+'" placeholder="Decision needed" aria-label="Decision needed"><input type="text" data-sf="owner" value="'+esc(it.owner)+'" placeholder="Decider" aria-label="Decision owner"><button type="button" class="icon-btn" data-sact="del" title="Remove" aria-label="Remove">×</button></div>';
+  }).join("") : srEmpty("No decisions needed this week.");
+  $("sNextList").innerHTML = state.statusNext.length ? state.statusNext.map(function(it){
+    return '<div class="sr-row2" data-sid="'+it.id+'"><input type="text" data-sf="text" value="'+esc(it.text)+'" placeholder="Next step" aria-label="Next step"><input type="text" data-sf="owner" value="'+esc(it.owner)+'" placeholder="Owner" aria-label="Next step owner"><button type="button" class="icon-btn" data-sact="del" title="Remove" aria-label="Remove">×</button></div>';
+  }).join("") : srEmpty("No next steps yet — these become next week's starting accomplishments when you archive.");
+}
+function bindStatusList(containerId, listKey){
+  var box=$(containerId); if(!box) return;
+  box.addEventListener("input", function(e){
+    var row=e.target.closest("[data-sid]"); if(!row) return;
+    var it=state[listKey].find(function(x){ return String(x.id)===row.getAttribute("data-sid"); }); if(!it) return;
+    var f=e.target.getAttribute("data-sf"); if(!f) return;
+    it[f]=e.target.value;
+    renderStatusPreview();
+  });
+  box.addEventListener("click", function(e){
+    var btn=e.target.closest("[data-sact='del']"); if(!btn) return;
+    var row=e.target.closest("[data-sid]"); if(!row) return;
+    var id=row.getAttribute("data-sid");
+    state[listKey]=state[listKey].filter(function(x){ return String(x.id)!==String(id); });
+    renderStatusLists(); renderStatusPreview();
+  });
+}
+bindStatusList("sAccompList","statusAccomplished");
+bindStatusList("sHitList","statusHit");
+bindStatusList("sUpList","statusUpcoming");
+bindStatusList("sRiskList","statusRisks");
+bindStatusList("sDecList","statusDecisions");
+bindStatusList("sNextList","statusNext");
+$("btnAddAccomp").addEventListener("click", function(){ state.statusAccomplished.push(newLine("")); renderStatusLists(); });
+$("btnAddHit").addEventListener("click", function(){ state.statusHit.push(newMile("", state.statusWeekStart, "")); renderStatusLists(); });
+$("btnAddUp").addEventListener("click", function(){ state.statusUpcoming.push(newMile("", "", "")); renderStatusLists(); });
+$("btnAddRisk").addEventListener("click", function(){ state.statusRisks.push(newRisk("", "", "")); renderStatusLists(); });
+$("btnAddDec").addEventListener("click", function(){ state.statusDecisions.push(newOwned("", "")); renderStatusLists(); });
+$("btnAddNext").addEventListener("click", function(){ state.statusNext.push(newOwned("", "")); renderStatusLists(); });
+$("sWeekStart").addEventListener("change", function(e){ state.statusWeekStart=e.target.value; renderStatus(); });
+$("sRagReason").addEventListener("input", function(e){ state.statusRagReason=e.target.value; renderStatusPreview(); });
+document.querySelectorAll(".rag-btn").forEach(function(b){
+  b.addEventListener("click", function(){ state.statusRag=b.getAttribute("data-rag"); renderStatus(); });
+});
+$("btnThisWeek").addEventListener("click", function(){ state.statusWeekStart=toISO(mondayOf(new Date())); renderStatus(); toast("Reporting week set to this week — refresh milestones to prefill it"); });
+$("btnPrefill").addEventListener("click", function(){ prefillMilestones(true); });
+$("btnStatusExport").addEventListener("click", function(){ $("btnExportJson").click(); });
+$("btnStatusImport").addEventListener("click", function(){ $("fImport").click(); });
+
+/* ---------------- Status Report: previous-week memory ---------------- */
+function snapshotStatus(){
+  return JSON.parse(JSON.stringify({weekStart:state.statusWeekStart, weekLabel:weekLabel(), rag:state.statusRag, ragReason:state.statusRagReason, accomplished:state.statusAccomplished, hit:state.statusHit, upcoming:state.statusUpcoming, risks:state.statusRisks, decisions:state.statusDecisions, next:state.statusNext}));
+}
+function renderStatusHistory(){
+  var info=$("sHistoryInfo"), list=$("sHistoryList"); if(!info||!list) return;
+  if(state.statusHistory.length){
+    var last=state.statusHistory[state.statusHistory.length-1];
+    info.innerHTML='<div class="check ok" style="margin-top:14px"><span aria-hidden="true">✓</span><div>Previous report on file: week of '+esc(last.weekLabel||"")+' — RAG '+esc(String(last.rag||"").toUpperCase())+'. This week started from it; the full history is below and travels in your project file.</div></div>';
+    list.innerHTML=state.statusHistory.map(function(h,i){
+      return '<div class="hist-item"><span class="rag-pill '+esc(validRag(h.rag))+'">'+esc(validRag(h.rag))+'</span><span class="grow"><b>Week of '+esc(h.weekLabel||"")+'</b><br><span style="color:var(--muted)">'+esc(h.ragReason||"")+'</span></span><button type="button" class="btn small" data-hist="'+i+'">Load</button></div>';
+    }).join("");
+  } else { info.innerHTML=""; list.innerHTML=""; }
+}
+$("sHistoryList").addEventListener("click", function(e){
+  var btn=e.target.closest("[data-hist]"); if(!btn) return;
+  var h=state.statusHistory[+btn.getAttribute("data-hist")]; if(!h) return;
+  state.statusWeekStart=h.weekStart||state.statusWeekStart; state.statusRag=validRag(h.rag); state.statusRagReason=h.ragReason||"";
+  state.statusAccomplished=(h.accomplished||[]).map(function(x){ return newLine(x.text); });
+  state.statusHit=(h.hit||[]).map(function(x){ return newMile(x.text, x.date, x.owner); });
+  state.statusUpcoming=(h.upcoming||[]).map(function(x){ return newMile(x.text, x.date, x.owner); });
+  state.statusRisks=(h.risks||[]).map(function(x){ return newRisk(x.text, x.owner, x.mitigation); });
+  state.statusDecisions=(h.decisions||[]).map(function(x){ return newOwned(x.text, x.owner); });
+  state.statusNext=(h.next||[]).map(function(x){ return newOwned(x.text, x.owner); });
+  renderStatus(); toast("Loaded the archived report for the week of "+(h.weekLabel||"")+" — the archive itself is unchanged");
+});
+$("btnArchiveWeek").addEventListener("click", function(){
+  state.statusHistory.push(snapshotStatus());
+  var carriedNext=state.statusNext.filter(function(x){ return x.text; }).map(function(x){ return newLine(x.text); });
+  var carriedRisks=state.statusRisks.map(function(x){ return newRisk(x.text, x.owner, x.mitigation); });
+  var carriedDec=state.statusDecisions.map(function(x){ return newOwned(x.text, x.owner); });
+  var ns=new Date(weekStartDate().getFullYear(), weekStartDate().getMonth(), weekStartDate().getDate()+7);
+  state.statusWeekStart=toISO(ns);
+  state.statusAccomplished=carriedNext;
+  state.statusHit=[];
+  state.statusNext=[];
+  state.statusRisks=carriedRisks;
+  state.statusDecisions=carriedDec;
+  state.statusUpcoming=state.statusUpcoming.filter(function(x){ var d=parseD(x.date); return !d || d>=ns; });
+  prefillMilestones(false);
+  renderStatus();
+  toast("Week archived — new report for the week of "+weekLabel()+" starts prefilled from last week");
+});
+
+/* ---------------- Status Report: preview ---------------- */
+function bulletList(items, emptyMsg){
+  var t=(items||[]).filter(function(x){ return x.text; });
+  if(!t.length) return "<li>"+esc(emptyMsg)+"</li>";
+  return t.map(function(x){ return "<li>"+esc(x.text)+(x.owner ? ' <span style="color:#5c6b64">('+esc(x.owner)+")</span>" : "")+"</li>"; }).join("");
+}
+function mileRows(items, emptyMsg){
+  var t=(items||[]).filter(function(x){ return x.text; });
+  if(!t.length) return '<tr><td colspan="3" style="color:#5c6b64">'+esc(emptyMsg)+'</td></tr>';
+  return t.map(function(x){ var d=parseD(x.date); return '<tr><td>'+esc(x.text)+'</td><td style="white-space:nowrap">'+(d?esc(fmtDay(d)):"")+'</td><td>'+esc(x.owner||"")+'</td></tr>'; }).join("");
+}
+function statusSlide1(){
+  var rm=ragMeta();
+  return '<div class="slide road"><div class="slide-inner"><h3>'+esc(state.product||"Project")+' — weekly status</h3>'
+    + '<p class="sub">Week of '+esc(weekLabel())+(state.presenter ? " · "+esc(state.presenter) : "")+(state.company ? " · "+esc(state.company) : "")+'</p>'
+    + '<div class="st-band"><span class="rag-pill '+esc(validRag(state.statusRag))+'">'+rm.label+'</span><span class="why">'+esc(state.statusRagReason||"Add the one-line reason for this RAG in the Week card.")+'</span></div>'
+    + '<div class="st-cols"><div><h4>Accomplished this week</h4><ul>'+bulletList(state.statusAccomplished,"Nothing recorded yet — add it in the Done card.")+'</ul></div>'
+    + '<div><h4>Next steps — next week</h4><ul>'+bulletList(state.statusNext,"No next steps recorded yet.")+'</ul></div></div>'
+    + '<div class="slide-foot"><span>'+esc(state.footer||"")+'</span><span>'+state.statusHit.filter(function(x){return x.text;}).length+' milestones hit · '+state.statusRisks.filter(function(x){return x.text;}).length+' risks open · '+state.statusDecisions.filter(function(x){return x.text;}).length+' decisions needed</span></div></div></div>';
+}
+function statusSlide2(){
+  var risks=(state.statusRisks||[]).filter(function(x){ return x.text; });
+  var riskRows = risks.length ? risks.map(function(x){ return '<tr><td>'+esc(x.text)+'</td><td>'+esc(x.owner||"—")+'</td><td>'+esc(x.mitigation||"—")+'</td></tr>'; }).join("") : '<tr><td colspan="3" style="color:#5c6b64">No risks or issues recorded.</td></tr>';
+  return '<div class="slide road"><div class="slide-inner"><h3>Milestones, risks &amp; decisions</h3>'
+    + '<p class="sub">Week of '+esc(weekLabel())+' · Detail behind the headline RAG</p>'
+    + '<div class="st-cols" style="flex:none"><div><h4>Milestones hit</h4><table class="st-table"><tr><th>Milestone</th><th>Date</th><th>Owner</th></tr>'+mileRows(state.statusHit,"No milestones hit recorded.")+'</table></div>'
+    + '<div><h4>Coming up</h4><table class="st-table"><tr><th>Milestone</th><th>Date</th><th>Owner</th></tr>'+mileRows(state.statusUpcoming,"Nothing upcoming on record.")+'</table></div></div>'
+    + '<h4 style="margin:.9em 0 .4em;font-size:1em">Risks &amp; issues</h4><table class="st-table"><tr><th style="width:38%">Risk / issue</th><th style="width:18%">Owner</th><th>Mitigation</th></tr>'+riskRows+'</table>'
+    + '<h4 style="margin:.9em 0 .4em;font-size:1em">Decisions needed</h4><ul style="margin:0;padding-left:1.15em;line-height:1.5;font-size:.92em">'+bulletList(state.statusDecisions,"No decisions needed this week.")+'</ul>'
+    + '<div class="slide-foot"><span>'+esc(state.footer||"")+'</span><span>'+esc(state.company||"")+'</span></div></div></div>';
+}
+function renderStatusPreview(){
+  var box=$("statusPreview"); if(!box) return;
+  box.innerHTML='<div class="slide-label">Slide 1 · Status at a glance</div>'+statusSlide1()+'<div class="slide-label">Slide 2 · Milestones, risks &amp; decisions</div>'+statusSlide2();
+}
+function renderStatus(){
+  if(!$("sWeekStart")) return;
+  if(!state.statusWeekStart) state.statusWeekStart=toISO(mondayOf(new Date()));
+  $("sWeekStart").value=state.statusWeekStart;
+  $("sWeekEnd").value=fmtDay(weekEndDate());
+  if(document.activeElement!==$("sRagReason")) $("sRagReason").value=state.statusRagReason||"";
+  document.querySelectorAll(".rag-btn").forEach(function(b){ b.setAttribute("aria-pressed", b.getAttribute("data-rag")===state.statusRag ? "true" : "false"); });
+  renderStatusLists(); renderStatusHistory(); renderStatusPreview();
+}
+
+/* ---------------- Status Report: PPTX export ---------------- */
+function pptBullets(items, emptyMsg, fontSize){
+  var t=(items||[]).filter(function(x){ return x.text; });
+  if(!t.length) t=[{text:emptyMsg}];
+  return t.slice(0,8).map(function(x){ return {text:x.text+(x.owner ? " ("+x.owner+")" : ""), options:{bullet:true, breakLine:true, fontSize:fontSize||13, color:"24312B", fontFace:"Arial", lineSpacingMultiple:1.25, paraSpaceAfter:7}}; });
+}
+function buildStatusSlide1(pptx){
+  var s=pptx.addSlide(); s.background={color:"FFFFFF"};
+  addLogo(s, 0.3);
+  var rm=ragMeta();
+  s.addText((state.product||"Project")+" — weekly status", {x:0.55, y:0.32, w:10.2, h:0.55, fontSize:26, bold:true, color:"14201C", fontFace:"Arial"});
+  s.addText("Week of "+weekLabel()+(state.presenter ? "  ·  "+state.presenter : ""), {x:0.55, y:0.9, w:11, h:0.35, fontSize:12, color:"5C6B64", fontFace:"Arial"});
+  s.addShape(pptx.shapes.ROUNDED_RECTANGLE, {x:0.55, y:1.45, w:12.23, h:0.95, fill:{color:"F2F5F3"}, line:{color:"DFE5DF", width:1}, rectRadius:0.07});
+  s.addShape(pptx.shapes.ROUNDED_RECTANGLE, {x:0.75, y:1.68, w:1.5, h:0.5, fill:{color:rm.hex}, line:{type:"none"}, rectRadius:0.25});
+  s.addText(rm.label.toUpperCase(), {x:0.75, y:1.76, w:1.5, h:0.35, fontSize:13, bold:true, color:"FFFFFF", fontFace:"Arial", align:"center"});
+  s.addText(state.statusRagReason||"Overall health for the week", {x:2.5, y:1.62, w:10, h:0.65, fontSize:15, bold:true, color:"14201C", fontFace:"Arial", valign:"middle"});
+  s.addText("Accomplished this week", {x:0.55, y:2.75, w:5.9, h:0.4, fontSize:16, bold:true, color:"14201C", fontFace:"Arial"});
+  s.addText(pptBullets(state.statusAccomplished,"Nothing recorded yet.",13), {x:0.55, y:3.2, w:5.9, h:3.4, valign:"top"});
+  s.addText("Next steps — next week", {x:6.9, y:2.75, w:5.9, h:0.4, fontSize:16, bold:true, color:"14201C", fontFace:"Arial"});
+  s.addText(pptBullets(state.statusNext,"No next steps recorded yet.",13), {x:6.9, y:3.2, w:5.9, h:3.4, valign:"top"});
+  addFooter(s, pptx);
+  return s;
+}
+function buildStatusSlide2(pptx){
+  var s=pptx.addSlide(); s.background={color:"FFFFFF"};
+  addLogo(s, 0.3);
+  s.addText("Milestones, risks & decisions", {x:0.55, y:0.32, w:10.2, h:0.55, fontSize:26, bold:true, color:"14201C", fontFace:"Arial"});
+  s.addText("Week of "+weekLabel()+"  ·  Detail behind the headline RAG", {x:0.55, y:0.9, w:11, h:0.35, fontSize:12, color:"5C6B64", fontFace:"Arial"});
+  function mileText(items, emptyMsg){
+    var t=(items||[]).filter(function(x){ return x.text; });
+    if(!t.length) return [{text:emptyMsg, options:{fontSize:12, color:"5C6B64", fontFace:"Arial"}}];
+    return t.slice(0,5).map(function(x){ var d=parseD(x.date); return {text:x.text+(d ? " — "+fmtDay(d) : "")+(x.owner ? " ("+x.owner+")" : ""), options:{bullet:true, breakLine:true, fontSize:12.5, color:"24312B", fontFace:"Arial", paraSpaceAfter:6}}; });
+  }
+  s.addText("Milestones hit", {x:0.55, y:1.45, w:5.9, h:0.35, fontSize:15, bold:true, color:"14201C", fontFace:"Arial"});
+  s.addText(mileText(state.statusHit,"No milestones hit recorded."), {x:0.55, y:1.85, w:5.9, h:1.7, valign:"top"});
+  s.addText("Coming up", {x:6.9, y:1.45, w:5.9, h:0.35, fontSize:15, bold:true, color:"14201C", fontFace:"Arial"});
+  s.addText(mileText(state.statusUpcoming,"Nothing upcoming on record."), {x:6.9, y:1.85, w:5.9, h:1.7, valign:"top"});
+  s.addText("Risks & issues", {x:0.55, y:3.75, w:7, h:0.35, fontSize:15, bold:true, color:"14201C", fontFace:"Arial"});
+  var riskLines=(state.statusRisks||[]).filter(function(x){ return x.text; });
+  var riskText = riskLines.length ? riskLines.slice(0,4).map(function(x){ return {text:x.text+" — Owner: "+(x.owner||"TBD")+" · Mitigation: "+(x.mitigation||"not set"), options:{bullet:true, breakLine:true, fontSize:12, color:"7A2E0E", fontFace:"Arial", paraSpaceAfter:6}}; }) : [{text:"No risks or issues recorded.", options:{fontSize:12, color:"5C6B64", fontFace:"Arial"}}];
+  s.addText(riskText, {x:0.55, y:4.15, w:7.2, h:2.2, valign:"top"});
+  s.addText("Decisions needed", {x:8.15, y:3.75, w:4.6, h:0.35, fontSize:15, bold:true, color:"14201C", fontFace:"Arial"});
+  s.addText(pptBullets(state.statusDecisions,"No decisions needed this week.",12), {x:8.15, y:4.15, w:4.6, h:2.2, valign:"top"});
+  addFooter(s, pptx);
+  return s;
+}
+$("btnStatusDownload").addEventListener("click", function(){
+  if(typeof PptxGenJS==="undefined"){ toast("The PowerPoint library hasn't loaded yet — check your connection and try again in a few seconds"); return; }
+  var btn=this; btn.disabled=true; btn.textContent="Building deck…";
+  try{
+    var pptx=new PptxGenJS();
+    pptx.defineLayout({name:"WIDE", width:13.33, height:7.5}); pptx.layout="WIDE";
+    pptx.company=state.company||""; pptx.title=(state.product||"Project")+" — Status report, week of "+weekLabel(); pptx.author=state.presenter||"";
+    buildStatusSlide1(pptx); buildStatusSlide2(pptx);
+    var fname=(state.product||"project").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")+"-status-"+state.statusWeekStart+".pptx";
+    pptx.writeFile({fileName: fname}).then(function(){ toast("Downloaded "+fname+" — the 2-slide status report, in your brand kit"); })
+      .catch(function(){ toast("The download was blocked — try again"); })
+      .finally(function(){ btn.disabled=false; btn.textContent="⬇ Download status .pptx"; });
+  }catch(err){
+    btn.disabled=false; btn.textContent="⬇ Download status .pptx";
+    toast("Something went wrong building the file — your report is still here, try again");
+  }
+});
+
 /* ---------------- Init ---------------- */
 var initY=new Date().getFullYear()+1;
 state.startDate=initY+"-01-01"; state.endDate=initY+"-12-31";
 state.date = new Date().toISOString().slice(0,10);
+state.statusWeekStart=toISO(mondayOf(new Date()));
 syncForm(); renderAll();
 </script>
 </body>
